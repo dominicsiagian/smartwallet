@@ -225,6 +225,24 @@
 
     <div id="toast-container"></div>
 
+    <div id="custom-modal" class="absolute inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="modal-card" class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300">
+        <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-1">Judul</h3>
+        <p id="modal-desc" class="text-xs text-gray-500 mb-5">Deskripsi</p>
+        
+        <div class="relative mb-6">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">Rp</span>
+          <input type="text" inputmode="numeric" pattern="[0-9]*" id="modal-input" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-800 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all placeholder-gray-300" placeholder="0">
+        </div>
+        
+        <div class="flex gap-3">
+          <button id="btn-cancel" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button id="btn-confirm" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Konfirmasi</button>
+        </div>
+      </div>
+    </div>
+    ```
+
     <div class="scroll-hidden overflow-y-auto flex-1 px-5 pt-12" style="padding-bottom: 100px;">
 
       <div class="pb-4 fade-up-1">
@@ -684,14 +702,23 @@
     }
 
     // Javascript saldo baru
-    let currentBalance = parseInt(localStorage.getItem('smartwallet_balance')) || 5000000;
+let currentBalance = parseInt(localStorage.getItem('smartwallet_balance')) || 5000000;
     
     const balanceEl = document.getElementById('balance-amount');
     const btnTopUp = document.getElementById('btn-topup');
     const btnTransfer = document.getElementById('btn-transfer');
     
-    // Default disembunyikan sesuai gambar screenshot
+    // Ambil elemen Modal
+    const customModal = document.getElementById('custom-modal');
+    const modalCard = document.getElementById('modal-card');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalInput = document.getElementById('modal-input');
+    const btnCancel = document.getElementById('btn-cancel');
+    const btnConfirm = document.getElementById('btn-confirm');
+    
     let balanceVisible = false; 
+    let currentAction = ''; // Menyimpan status apakah user sedang Top-Up atau Transfer
 
     function formatRupiah(number) {
       return new Intl.NumberFormat('id-ID').format(number);
@@ -714,40 +741,81 @@
       updateBalanceUI();
     });
 
+    // ── FUNGSI KONTROL MODAL ──
+    function openModal(action, title, desc) {
+      currentAction = action;
+      modalTitle.textContent = title;
+      modalDesc.textContent = desc;
+      modalInput.value = ''; // Kosongkan input sebelumnya
+      
+      // Animasi memunculkan modal
+      customModal.classList.remove('opacity-0', 'pointer-events-none');
+      modalCard.classList.remove('scale-95');
+      modalCard.classList.add('scale-100');
+      
+      // Fokus ke kotak input otomatis (munculkan keyboard)
+      setTimeout(() => modalInput.focus(), 100);
+    }
+
+    function closeModal() {
+      // Animasi menyembunyikan modal
+      customModal.classList.add('opacity-0', 'pointer-events-none');
+      modalCard.classList.remove('scale-100');
+      modalCard.classList.add('scale-95');
+      modalInput.blur(); // Tutup keyboard
+    }
+
+    // Tombol di Card Saldo diklik
     btnTopUp.addEventListener('click', () => {
-      const input = prompt("Simulasi Top-Up\nMasukkan nominal uang (contoh: 50000):");
-      if (input !== null && input.trim() !== "") {
-        const amount = parseInt(input.replace(/\D/g, '')); 
-        if (!isNaN(amount) && amount > 0) {
-          currentBalance += amount;
-          localStorage.setItem('smartwallet_balance', currentBalance);
-          updateBalanceUI();
-          showToast('success', 'Top-Up Berhasil', `Saldo bertambah Rp ${formatRupiah(amount)}`);
-        } else {
-          showToast('error', 'Gagal', 'Nominal Top-Up tidak valid.');
-        }
-      }
+      openModal('topup', 'Top-Up Saldo', 'Masukkan nominal uang yang ingin ditambahkan.');
     });
 
     btnTransfer.addEventListener('click', () => {
-      const input = prompt("Simulasi Transfer\nMasukkan nominal yang ingin dikirim:");
-      if (input !== null && input.trim() !== "") {
-        const amount = parseInt(input.replace(/\D/g, ''));
-        if (!isNaN(amount) && amount > 0) {
-          if (amount <= currentBalance) {
-            currentBalance -= amount;
-            localStorage.setItem('smartwallet_balance', currentBalance);
-            updateBalanceUI();
-            showToast('success', 'Transfer Berhasil', `Berhasil mengirim Rp ${formatRupiah(amount)}`);
-          } else {
-            showToast('warning', 'Transfer Gagal', 'Saldo Anda tidak mencukupi.');
-          }
+      openModal('transfer', 'Transfer Uang', 'Masukkan nominal yang ingin dikirim.');
+    });
+
+    // Tombol Batal di Modal diklik
+    btnCancel.addEventListener('click', closeModal);
+    
+    // Tutup modal jika klik di luar kotak putih
+    customModal.addEventListener('click', (e) => {
+      if (e.target === customModal) closeModal(); 
+    });
+
+    // Cegah user mengetik huruf di input nominal
+    modalInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    // Tombol Konfirmasi di Modal diklik
+    btnConfirm.addEventListener('click', () => {
+      const amount = parseInt(modalInput.value);
+      
+      if (!amount || amount <= 0 || isNaN(amount)) {
+        showToast('error', 'Gagal', 'Masukkan nominal yang valid.');
+        return;
+      }
+
+      if (currentAction === 'topup') {
+        currentBalance += amount;
+        localStorage.setItem('smartwallet_balance', currentBalance);
+        updateBalanceUI();
+        showToast('success', 'Top-Up Berhasil', `Saldo bertambah Rp ${formatRupiah(amount)}`);
+        closeModal();
+      } 
+      else if (currentAction === 'transfer') {
+        if (amount <= currentBalance) {
+          currentBalance -= amount;
+          localStorage.setItem('smartwallet_balance', currentBalance);
+          updateBalanceUI();
+          showToast('success', 'Transfer Berhasil', `Berhasil mengirim Rp ${formatRupiah(amount)}`);
+          closeModal();
         } else {
-          showToast('error', 'Gagal', 'Nominal transfer tidak valid.');
+          showToast('warning', 'Transfer Gagal', 'Saldo Anda tidak mencukupi.');
         }
       }
     });
-
+    
     // ── Animate bars on scroll into view ──
     const observerOptions = { threshold: 0.1 };
     const animatedBars = document.querySelectorAll('.bar-animated, .progress-animated');
@@ -764,8 +832,6 @@
       bar.style.animationPlayState = 'paused';
       barObserver.observe(bar);
     });
-
-    
 
   </script>
 
