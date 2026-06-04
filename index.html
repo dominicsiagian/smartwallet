@@ -256,6 +256,7 @@
         </div>
       </div>
 
+      <!-- ───── BALANCE CARD (FLEXIBLE & ID ADDED) ───── -->
       <div class="pb-5 fade-up-2">
         <div class="card-gradient card-mesh relative rounded-3xl p-6 shadow-xl overflow-hidden">
           <div class="card-circle w-40 h-40 -top-16 -right-16 border-white/10"></div>
@@ -277,7 +278,8 @@
 
           <div class="relative mb-6">
             <p class="text-white/60 text-xs font-medium mb-1 tracking-wide">Total Saldo Anda</p>
-            <p class="text-white font-bold text-4xl tracking-tight" style="font-family: 'DM Serif Display', serif;">Rp 5.000.000</p>
+            <!-- ID DITAMBAHKAN UNTUK JAVASCRIPT -->
+            <p id="balance-amount" class="text-white font-bold text-4xl tracking-tight cursor-pointer" style="font-family: 'DM Serif Display', serif;" title="Ketuk untuk menyembunyikan saldo"></p>
             <p class="text-emerald-300 text-xs mt-1.5 flex items-center gap-1">
               <i class="fa-solid fa-arrow-trend-up text-xs"></i>
               <span>+Rp 500.000 bulan ini</span>
@@ -289,18 +291,20 @@
           </div>
 
           <div class="relative flex gap-3">
+            <!-- ID DITAMBAHKAN DAN ONCLICK DIHAPUS -->
             <button
+              id="btn-topup"
               class="action-btn flex-1 flex items-center justify-center gap-2 bg-white rounded-xl py-3 shadow-md"
-              onclick="showToast('success', 'Top-Up', 'Fitur Top-Up sedang disimulasikan!')"
             >
               <i class="fa-solid fa-plus text-brand-800 text-sm"></i>
               <span class="text-brand-800 font-semibold text-sm">Top-Up</span>
             </button>
 
+            <!-- ID DITAMBAHKAN DAN ONCLICK DIHAPUS -->
             <button
+              id="btn-transfer"
               class="action-btn flex-1 flex items-center justify-center gap-2 border border-white/40 rounded-xl py-3 backdrop-blur-sm"
               style="background: rgba(255,255,255,0.12);"
-              onclick="showToast('info', 'Transfer', 'Fitur Transfer sedang disimulasikan!')"
             >
               <i class="fa-solid fa-paper-plane text-white text-sm"></i>
               <span class="text-white font-semibold text-sm">Transfer</span>
@@ -610,7 +614,9 @@
       </div>
     </nav>
 
-  </div><script>
+  </div>
+  
+  <script>
     // ── Toast notification system ──
     const toastContainer = document.getElementById('toast-container');
     let toastQueue = [];
@@ -677,18 +683,70 @@
       el.addEventListener('animationend', () => el.remove(), { once: true });
     }
 
-    // ── Balance toggle (tap to hide/show) ──
-    const balanceEl = document.querySelector('.text-4xl.font-bold, p[style*="DM Serif Display"]');
-    let balanceVisible = true;
-    if (balanceEl) {
-      balanceEl.addEventListener('click', () => {
-        balanceVisible = !balanceVisible;
-        balanceEl.textContent = balanceVisible ? 'Rp 5.000.000' : 'Rp •••.•••.•••';
-        balanceEl.style.letterSpacing = balanceVisible ? '-0.02em' : '0.1em';
-      });
-      balanceEl.style.cursor = 'pointer';
-      balanceEl.title = 'Ketuk untuk menyembunyikan saldo';
+    // Javascript saldo baru
+    let currentBalance = parseInt(localStorage.getItem('smartwallet_balance')) || 5000000;
+    
+    const balanceEl = document.getElementById('balance-amount');
+    const btnTopUp = document.getElementById('btn-topup');
+    const btnTransfer = document.getElementById('btn-transfer');
+    
+    // Default disembunyikan sesuai gambar screenshot
+    let balanceVisible = false; 
+
+    function formatRupiah(number) {
+      return new Intl.NumberFormat('id-ID').format(number);
     }
+
+    function updateBalanceUI() {
+      if (balanceVisible) {
+        balanceEl.textContent = 'Rp ' + formatRupiah(currentBalance);
+        balanceEl.style.letterSpacing = '-0.02em';
+      } else {
+        balanceEl.textContent = 'Rp •••.•••.•••';
+        balanceEl.style.letterSpacing = '0.1em';
+      }
+    }
+
+    updateBalanceUI();
+
+    balanceEl.addEventListener('click', () => {
+      balanceVisible = !balanceVisible;
+      updateBalanceUI();
+    });
+
+    btnTopUp.addEventListener('click', () => {
+      const input = prompt("Simulasi Top-Up\nMasukkan nominal uang (contoh: 50000):");
+      if (input !== null && input.trim() !== "") {
+        const amount = parseInt(input.replace(/\D/g, '')); 
+        if (!isNaN(amount) && amount > 0) {
+          currentBalance += amount;
+          localStorage.setItem('smartwallet_balance', currentBalance);
+          updateBalanceUI();
+          showToast('success', 'Top-Up Berhasil', `Saldo bertambah Rp ${formatRupiah(amount)}`);
+        } else {
+          showToast('error', 'Gagal', 'Nominal Top-Up tidak valid.');
+        }
+      }
+    });
+
+    btnTransfer.addEventListener('click', () => {
+      const input = prompt("Simulasi Transfer\nMasukkan nominal yang ingin dikirim:");
+      if (input !== null && input.trim() !== "") {
+        const amount = parseInt(input.replace(/\D/g, ''));
+        if (!isNaN(amount) && amount > 0) {
+          if (amount <= currentBalance) {
+            currentBalance -= amount;
+            localStorage.setItem('smartwallet_balance', currentBalance);
+            updateBalanceUI();
+            showToast('success', 'Transfer Berhasil', `Berhasil mengirim Rp ${formatRupiah(amount)}`);
+          } else {
+            showToast('warning', 'Transfer Gagal', 'Saldo Anda tidak mencukupi.');
+          }
+        } else {
+          showToast('error', 'Gagal', 'Nominal transfer tidak valid.');
+        }
+      }
+    });
 
     // ── Animate bars on scroll into view ──
     const observerOptions = { threshold: 0.1 };
@@ -706,6 +764,9 @@
       bar.style.animationPlayState = 'paused';
       barObserver.observe(bar);
     });
+
+    
+
   </script>
 
 </body>
