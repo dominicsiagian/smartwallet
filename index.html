@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartWallet — Dompet Digital Cerdas</title>
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- Google Fonts: DM Sans + DM Serif Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
@@ -86,7 +83,7 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
     }
 
     /* Scrollbar hidden */
@@ -211,21 +208,16 @@
   </style>
 </head>
 
-<body class="py-8">
+<body class="py-4">
 
-  <!-- ===== MOBILE FRAME ===== -->
-  <div class="max-w-md mx-auto min-h-screen bg-gray-50 shadow-2xl relative overflow-hidden" id="app-frame" style="max-width: 390px; border-radius: 40px;">
+  <div class="w-full bg-gray-50 shadow-2xl relative overflow-hidden flex flex-col" id="app-frame" style="max-width: 390px; height: 844px; border-radius: 40px;">
 
-    <!-- Toast Container -->
     <div id="toast-container"></div>
 
-    <!-- ===== SCROLLABLE CONTENT ===== -->
-    <div class="scroll-hidden overflow-y-auto" style="height: 100vh; padding-bottom: 88px;">
+    <div class="scroll-hidden overflow-y-auto flex-1 px-5 pt-12" style="padding-bottom: 100px;">
 
-      <!-- ───── HEADER ───── -->
-      <div class="px-5 pt-12 pb-4 fade-up-1">
+      <div class="pb-4 fade-up-1">
         <div class="flex items-center justify-between">
-          <!-- Profile -->
           <div class="flex items-center gap-3">
             <div class="relative">
               <img
@@ -242,28 +234,23 @@
             </div>
           </div>
 
-          <!-- Notification bell -->
           <button
             class="nav-btn relative w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-sm border border-gray-100"
             onclick="showToast('info', 'Notifikasi', 'Anda memiliki 3 pesan yang belum dibaca.')"
             aria-label="Notifikasi"
           >
             <i class="fa-regular fa-bell text-gray-600 text-base"></i>
-            <!-- Red dot indicator -->
             <span class="notif-dot absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
           </button>
         </div>
       </div>
 
-      <!-- ───── BALANCE CARD ───── -->
-      <div class="px-5 pb-5 fade-up-2">
+      <div class="pb-5 fade-up-2">
         <div class="card-gradient card-mesh relative rounded-3xl p-6 shadow-xl overflow-hidden">
-          <!-- Decorative circles -->
           <div class="card-circle w-40 h-40 -top-16 -right-16 border-white/10"></div>
           <div class="card-circle w-24 h-24 bottom-4 -left-8 border-white/8"></div>
           <div class="card-circle w-14 h-14 top-6 right-16 border-white/5"></div>
 
-          <!-- SmartWallet branding -->
           <div class="relative flex items-center justify-between mb-6">
             <div class="flex items-center gap-2">
               <div class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
@@ -277,7 +264,6 @@
             </div>
           </div>
 
-          <!-- Balance -->
           <div class="relative mb-6">
             <p class="text-white/60 text-xs font-medium mb-1 tracking-wide">Total Saldo Anda</p>
             <p class="text-white font-bold text-4xl tracking-tight" style="font-family: 'DM Serif Display', serif;">Rp 5.000.000</p>
@@ -287,14 +273,11 @@
             </p>
           </div>
 
-          <!-- Card number dummy -->
           <div class="relative mb-6">
             <p class="text-white/40 text-xs tracking-widest font-mono">•••• •••• •••• 4821</p>
           </div>
 
-          <!-- Quick Actions -->
           <div class="relative flex gap-3">
-            <!-- Top-Up -->
             <button
               class="action-btn flex-1 flex items-center justify-center gap-2 bg-white rounded-xl py-3 shadow-md"
               onclick="showToast('success', 'Top-Up', 'Fitur Top-Up sedang disimulasikan!')"
@@ -303,7 +286,6 @@
               <span class="text-brand-800 font-semibold text-sm">Top-Up</span>
             </button>
 
-            <!-- Transfer -->
             <button
               class="action-btn flex-1 flex items-center justify-center gap-2 border border-white/40 rounded-xl py-3 backdrop-blur-sm"
               style="background: rgba(255,255,255,0.12);"
@@ -316,8 +298,7 @@
         </div>
       </div>
 
-      <!-- ───── QUICK MENU SHORTCUTS ───── -->
-      <div class="px-5 pb-5 fade-up-3">
+      <div class="pb-5 fade-up-3">
         <div class="grid grid-cols-4 gap-3">
           <button class="nav-btn flex flex-col items-center gap-2" onclick="showToast('info', 'Bayar', 'Fitur Bayar sedang disimulasikan!')">
             <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center shadow-sm border border-brand-100">
@@ -339,17 +320,15 @@
           </button>
           <button class="nav-btn flex flex-col items-center gap-2" onclick="showToast('info', 'Lainnya', 'Jelajahi lebih banyak fitur SmartWallet!')">
             <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-sm border border-gray-200">
-              <i class="fa-solid fa-grid-2 text-gray-500 text-lg"></i>
+              <i class="fa-solid fa-ellipsis text-gray-500 text-lg"></i>
             </div>
             <span class="text-xs text-gray-500 font-medium">Lainnya</span>
           </button>
         </div>
       </div>
 
-      <!-- ───── EXPENSE TRACKER ───── -->
-      <div class="px-5 pb-5 fade-up-3">
+      <div class="pb-5 fade-up-3">
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <!-- Header -->
           <div class="flex items-center justify-between mb-4">
             <div>
               <h2 class="text-sm font-semibold text-gray-800">Pengeluaran Bulan Ini</h2>
@@ -361,7 +340,6 @@
             </div>
           </div>
 
-          <!-- Limit progress bar -->
           <div class="mb-4">
             <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div class="h-full rounded-full bg-gradient-to-r from-rose-400 to-rose-500 bar-animated" style="--bar-width: 66.7%;"></div>
@@ -369,9 +347,7 @@
             <p class="text-xs text-gray-400 mt-1">66.7% dari batas pengeluaran</p>
           </div>
 
-          <!-- Category bars -->
           <div class="space-y-3">
-            <!-- Makanan -->
             <div>
               <div class="flex justify-between items-center mb-1.5">
                 <div class="flex items-center gap-2">
@@ -390,7 +366,6 @@
               </div>
             </div>
 
-            <!-- Transportasi -->
             <div>
               <div class="flex justify-between items-center mb-1.5">
                 <div class="flex items-center gap-2">
@@ -409,7 +384,6 @@
               </div>
             </div>
 
-            <!-- Belanja -->
             <div>
               <div class="flex justify-between items-center mb-1.5">
                 <div class="flex items-center gap-2">
@@ -428,7 +402,6 @@
               </div>
             </div>
 
-            <!-- Lainnya -->
             <div>
               <div class="flex justify-between items-center mb-1.5">
                 <div class="flex items-center gap-2">
@@ -450,22 +423,18 @@
         </div>
       </div>
 
-      <!-- ───── VIRTUAL SAVINGS ───── -->
-      <div class="px-5 pb-5 fade-up-4">
+      <div class="pb-5 fade-up-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-sm font-semibold text-gray-800">Target Tabungan</h2>
           <button class="text-xs text-brand-700 font-medium" onclick="showToast('info', 'Tabungan', 'Kelola semua target tabungan Anda!')">Lihat Semua</button>
         </div>
 
-        <!-- Savings card -->
         <div class="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100 overflow-hidden cursor-pointer"
              onclick="showToast('success', 'Tabungan', 'Target tabungan Liburan Akhir Tahun dipilih!')">
-          <!-- Shimmer overlay -->
           <div class="shimmer absolute inset-0 opacity-30 pointer-events-none" style="border-radius: inherit;"></div>
 
           <div class="relative flex items-start justify-between mb-3">
             <div class="flex items-center gap-3">
-              <!-- Icon -->
               <div class="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm"
                    style="background: linear-gradient(135deg, #065f46, #0f766e);">
                 <i class="fa-solid fa-plane text-white text-base"></i>
@@ -478,7 +447,6 @@
             <span class="bg-brand-50 text-brand-700 text-xs font-semibold px-2.5 py-1 rounded-lg border border-brand-100">60%</span>
           </div>
 
-          <!-- Amount -->
           <div class="flex justify-between items-end mb-3">
             <div>
               <p class="text-xs text-gray-400">Terkumpul</p>
@@ -490,11 +458,9 @@
             </div>
           </div>
 
-          <!-- Progress bar -->
           <div class="relative">
             <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
               <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 relative progress-animated">
-                <!-- Highlight stripe -->
                 <div class="absolute inset-y-0 left-0 w-full bg-white/20 rounded-full"
                      style="background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%); background-size: 60% 100%;"></div>
               </div>
@@ -506,7 +472,6 @@
           </div>
         </div>
 
-        <!-- Add goal prompt -->
         <button
           class="action-btn w-full mt-3 border-2 border-dashed border-brand-200 rounded-2xl py-3.5 flex items-center justify-center gap-2 bg-brand-50/50"
           onclick="showToast('info', 'Target Baru', 'Buat target tabungan baru sekarang!')"
@@ -516,19 +481,17 @@
         </button>
       </div>
 
-      <!-- ───── TRANSACTION HISTORY ───── -->
-      <div class="px-5 pb-6 fade-up-5">
+      <div class="pb-6 fade-up-5">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-sm font-semibold text-gray-800">Transaksi Terakhir</h2>
           <button class="text-xs text-brand-700 font-medium" onclick="showToast('info', 'Riwayat', 'Menampilkan semua riwayat transaksi!')">Lihat Semua</button>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <!-- Transaction 1: Transfer -->
           <button class="tx-item w-full flex items-center gap-3.5 px-4 py-3.5 text-left"
                   onclick="showToast('info', 'Detail Transaksi', 'Transfer ke Budi sebesar Rp 150.000 pada 3 Jun 2026.')">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                 style="background: linear-gradient(135deg, #fde8e8, #fbd5d5);">
+                  style="background: linear-gradient(135deg, #fde8e8, #fbd5d5);">
               <i class="fa-solid fa-arrow-up-right text-rose-500 text-sm"></i>
             </div>
             <div class="flex-1 min-w-0">
@@ -544,14 +507,12 @@
             </div>
           </button>
 
-          <!-- Divider -->
           <div class="mx-4 h-px bg-gray-50"></div>
 
-          <!-- Transaction 2: Food -->
           <button class="tx-item w-full flex items-center gap-3.5 px-4 py-3.5 text-left"
                   onclick="showToast('info', 'Detail Transaksi', 'Split Bill Makan Malam sebesar Rp 75.000 pada 2 Jun 2026.')">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                 style="background: linear-gradient(135deg, #fef3e2, #fde8c6);">
+                  style="background: linear-gradient(135deg, #fef3e2, #fde8c6);">
               <i class="fa-solid fa-utensils text-orange-400 text-sm"></i>
             </div>
             <div class="flex-1 min-w-0">
@@ -567,14 +528,12 @@
             </div>
           </button>
 
-          <!-- Divider -->
           <div class="mx-4 h-px bg-gray-50"></div>
 
-          <!-- Transaction 3: Top-up -->
           <button class="tx-item w-full flex items-center gap-3.5 px-4 py-3.5 text-left"
                   onclick="showToast('info', 'Detail Transaksi', 'Top-Up Dana sebesar Rp 500.000 pada 1 Jun 2026.')">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                 style="background: linear-gradient(135deg, #d1fae5, #a7f3d0);">
+                  style="background: linear-gradient(135deg, #d1fae5, #a7f3d0);">
               <i class="fa-solid fa-arrow-down-left text-emerald-600 text-sm"></i>
             </div>
             <div class="flex-1 min-w-0">
@@ -592,14 +551,10 @@
         </div>
       </div>
 
-    </div><!-- end scrollable -->
-
-    <!-- ───── BOTTOM NAVIGATION ───── -->
-    <nav class="absolute bottom-0 left-0 right-0 z-50"
-         style="backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(255,255,255,0.92); border-top: 1px solid rgba(0,0,0,0.06);">
+    </div><nav class="absolute bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md"
+         style="border-top: 1px solid rgba(0,0,0,0.06);">
       <div class="flex items-end justify-around px-4 pt-3 pb-6">
 
-        <!-- Expense -->
         <button class="nav-btn flex flex-col items-center gap-1.5 group"
                 onclick="showToast('info', 'Pengeluaran', 'Halaman Expense sedang disimulasikan!')">
           <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50">
@@ -608,7 +563,6 @@
           <span class="text-xs font-medium text-gray-400 group-hover:text-brand-700 transition-colors">Expense</span>
         </button>
 
-        <!-- Split Bill -->
         <button class="nav-btn flex flex-col items-center gap-1.5 group"
                 onclick="showToast('info', 'Split Bill', 'Fitur Split Bill sedang disimulasikan!')">
           <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50">
@@ -617,7 +571,6 @@
           <span class="text-xs font-medium text-gray-400 group-hover:text-brand-700 transition-colors">Split Bill</span>
         </button>
 
-        <!-- HOME (active, center raised) -->
         <button class="nav-btn flex flex-col items-center gap-1.5 group -mt-6" id="home-btn"
                 onclick="showToast('success', 'Beranda', 'Anda sudah berada di halaman Beranda.')">
           <div class="w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg shadow-brand-800/30 transition-transform active:scale-95"
@@ -627,7 +580,6 @@
           <span class="text-xs font-semibold text-brand-800">Home</span>
         </button>
 
-        <!-- Savings -->
         <button class="nav-btn flex flex-col items-center gap-1.5 group"
                 onclick="showToast('info', 'Tabungan', 'Halaman Savings sedang disimulasikan!')">
           <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50">
@@ -636,7 +588,6 @@
           <span class="text-xs font-medium text-gray-400 group-hover:text-brand-700 transition-colors">Savings</span>
         </button>
 
-        <!-- Profile -->
         <button class="nav-btn flex flex-col items-center gap-1.5 group"
                 onclick="showToast('info', 'Profil', 'Halaman Profil sedang disimulasikan!')">
           <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50">
@@ -648,11 +599,7 @@
       </div>
     </nav>
 
-  </div><!-- end app-frame -->
-
-
-  <!-- ===== JAVASCRIPT ===== -->
-  <script>
+  </div><script>
     // ── Toast notification system ──
     const toastContainer = document.getElementById('toast-container');
     let toastQueue = [];
@@ -686,7 +633,6 @@
       const el = document.createElement('div');
       el.className = `toast flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl ring-1 ${cfg.ring} text-white max-w-xs w-[85%]`;
       el.style.background = `linear-gradient(135deg, var(--tw-gradient-stops))`;
-      // Apply gradient via Tailwind class
       el.classList.add('bg-gradient-to-br', ...cfg.bg.split(' '));
 
       el.innerHTML = `
@@ -704,11 +650,9 @@
 
       toastContainer.appendChild(el);
 
-      // Auto-dismiss after 3.2s
       const timer = setTimeout(() => dismissToast(el), 3200);
       el._timer = timer;
 
-      // Limit to 3 toasts
       const toasts = toastContainer.querySelectorAll('.toast:not(.removing)');
       if (toasts.length > 3) {
         dismissToast(toasts[0]);
@@ -723,7 +667,7 @@
     }
 
     // ── Balance toggle (tap to hide/show) ──
-    const balanceEl = document.querySelector('.text-4xl.font-bold');
+    const balanceEl = document.querySelector('.text-4xl.font-bold, p[style*="DM Serif Display"]');
     let balanceVisible = true;
     if (balanceEl) {
       balanceEl.addEventListener('click', () => {
@@ -736,7 +680,7 @@
     }
 
     // ── Animate bars on scroll into view ──
-    const observerOptions = { threshold: 0.3 };
+    const observerOptions = { threshold: 0.1 };
     const animatedBars = document.querySelectorAll('.bar-animated, .progress-animated');
 
     const barObserver = new IntersectionObserver((entries) => {
