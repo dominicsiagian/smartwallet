@@ -109,7 +109,7 @@
       </div>
     </div>
 
-    <div id="modal-pin-verify" class="absolute inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="modal-pin-verify" class="absolute inset-0 z-[130] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="modal-card-verify" class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
         <div class="w-16 h-16 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-lock"></i></div>
         <h3 id="pin-verify-title" class="text-lg font-bold text-gray-800 mb-1">Verifikasi PIN</h3>
@@ -396,7 +396,7 @@
                   <use transform="translate(11 46.2)" href="#clothes-rounded-7dff0831"/>
                 </g>
               </svg>
-            </div><div><p class="text-xs text-gray-400">Selamat Pagi</p><p class="text-sm font-bold">User</p></div></div>
+            </div><div><p class="text-xs text-gray-400">Selamat Pagi</p><p id="display-home-name" class="text-sm font-bold">User</p></div></div>
           <button id="notif-bell-btn" class="nav-btn w-10 h-10 rounded-xl bg-white shadow-sm border border-gray-100 relative" onclick="openNotifPanel()"><i class="fa-regular fa-bell text-gray-600"></i><span id="notif-red-dot" class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full hidden"></span></button>
         </div>
       </div>
@@ -446,7 +446,7 @@
               </g>
             </svg>
           </div>
-          <h3 class="text-xl font-bold">User</h3><p class="text-sm text-gray-500">user@example.com</p>
+          <h3 id="display-profile-name" class="text-xl font-bold">User</h3><p id="display-profile-email" class="text-sm text-gray-500">user@example.com</p>
         </div>
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-6 fade-up-2">
           <button onclick="openModal('modal-edit-profile')" class="w-full flex justify-between px-5 py-4 border-b border-gray-50 hover:bg-gray-50"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-regular fa-id-badge"></i></div><span class="text-sm font-semibold">Edit Profil</span></div><i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i></button>
@@ -783,19 +783,48 @@
           currentBalance += pendingTxAmount; 
           txs.unshift({ id: Date.now(), name: 'Top-Up Saldo', amount: pendingTxAmount, type: 'in', category: 'Pemasukan', date: 'Hari ini' });
           insertNewNotification('success', 'Top-Up Berhasil', `Ditambahkan Rp ${formatRupiah(pendingTxAmount)}`); 
-        } else { 
+          updateBalanceUI(); closeModal('modal-pin-verify'); pendingTxAmount = 0;
+          renderSpeedDial(); renderExpense();
+          
+        } else if (currentAction === 'transfer') { 
           currentBalance -= pendingTxAmount; 
           txs.unshift({ id: Date.now(), name: `Transfer: ${pendingTxCategory}`, amount: pendingTxAmount, type: 'out', category: pendingTxCategory, date: 'Hari ini' });
           insertNewNotification('success', 'Transfer Berhasil', `Dikirim Rp ${formatRupiah(pendingTxAmount)}`); 
+          updateBalanceUI(); closeModal('modal-pin-verify'); pendingTxAmount = 0;
+          renderSpeedDial(); renderExpense();
+          
+        } else if (currentAction === 'pay-splitbill') {
+          // LOGIKA UTK EKSEKUSI PEMBAYARAN SPLIT BILL SETELAH PIN BENAR
+          let bills = JSON.parse(localStorage.getItem('sw_split_bills'));
+          let b = bills.find(x => x.id === activeBillIdToPay);
+          let me = b.members.find(x => x.isMe);
+          
+          currentBalance -= me.amount; 
+          updateBalanceUI(); 
+          me.isPaid = true;
+          localStorage.setItem('sw_split_bills', JSON.stringify(bills));
+          
+          // Catat otomatis ke pengeluaran
+          txs.unshift({ id: Date.now(), name: `Split Bill: ${b.name}`, amount: me.amount, type: 'out', category: b.category, date: 'Hari ini' });
+          localStorage.setItem('sw_transactions', JSON.stringify(txs));
+          
+          closeModal('modal-pin-verify'); 
+          showToast('success', 'Berhasil', 'Pembayaran bagianmu sukses!');
+          
+          // Refresh UI semua komponen terdampak
+          if(activeBillId === activeBillIdToPay) openBillDetail(activeBillIdToPay); 
+          renderSplitBill(); 
+          checkBillCompletion(activeBillIdToPay); 
+          renderExpense(); 
+          renderSpeedDial();
+          
+          // Reset status
+          activeBillIdToPay = null;
+          currentAction = '';
         }
-        
-        localStorage.setItem('sw_transactions', JSON.stringify(txs));
-        updateBalanceUI(); closeModal('modal-pin-verify'); 
-        pendingTxAmount = 0; 
-        
-        renderSpeedDial(); 
-        renderExpense();
-      } else { showToast('error', 'Gagal', 'PIN salah.'); }
+      } else { 
+        showToast('error', 'Gagal', 'PIN yang Anda masukkan salah.'); 
+      }
     });
 
     // ── EXPENSE TRACKER LOGIC ──
@@ -1134,24 +1163,26 @@
 
     let activeBillIdToPay = null; 
     function payMyShare(billId) { activeBillIdToPay = billId; openModal('modal-confirm-pay'); }
+    
     document.getElementById('btn-execute-pay').addEventListener('click', () => {
       if (activeBillIdToPay !== null) {
         let bills = JSON.parse(localStorage.getItem('sw_split_bills'));
         let b = bills.find(x => x.id === activeBillIdToPay);
         let me = b.members.find(x => x.isMe);
-        if(currentBalance < me.amount) { closeModal('modal-confirm-pay'); return showToast('error', 'Gagal', 'Saldo utama tidak mencukupi.'); }
         
-        currentBalance -= me.amount; updateBalanceUI(); me.isPaid = true;
-        localStorage.setItem('sw_split_bills', JSON.stringify(bills));
+        if(currentBalance < me.amount) {
+          closeModal('modal-confirm-pay');
+          return showToast('error', 'Gagal', 'Saldo utama tidak mencukupi.');
+        }
         
-        let txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
-        txs.unshift({ id: Date.now(), name: `Split Bill: ${b.name}`, amount: me.amount, type: 'out', category: b.category, date: 'Hari ini' });
-        localStorage.setItem('sw_transactions', JSON.stringify(txs));
+        closeModal('modal-confirm-pay');
         
-        closeModal('modal-confirm-pay'); showToast('success', 'Berhasil', 'Pembayaran bagianmu sukses!');
-        if(activeBillId === activeBillIdToPay) openBillDetail(activeBillIdToPay); 
-        renderSplitBill(); checkBillCompletion(activeBillIdToPay); renderExpense(); renderSpeedDial();
-        activeBillIdToPay = null;
+        setTimeout(() => {
+          currentAction = 'pay-splitbill'; 
+          document.getElementById('pin-verify-title').textContent = 'Verifikasi PIN Split Bill';
+          document.getElementById('input-verify-pin').value = ''; 
+          openModal('modal-pin-verify');
+        }, 300);
       }
     });
 
@@ -1178,15 +1209,43 @@
 
     function saveProfileData() {
       const newName = document.getElementById('edit-profile-name').value;
-      if(!newName.trim()) return showToast('error', 'Gagal', 'Nama tidak boleh kosong.');
+      const newEmail = document.getElementById('edit-profile-email').value;
       
-      document.querySelectorAll('.font-bold').forEach(el => {
-        if(el.textContent === 'User') el.textContent = newName;
-      });
+      if(!newName.trim()) return showToast('error', 'Gagal', 'Nama tidak boleh kosong.');
+      if(!newEmail.trim()) return showToast('error', 'Gagal', 'Email tidak boleh kosong.');
+      
+      const homeNameEl = document.getElementById('display-home-name');
+      const profileNameEl = document.getElementById('display-profile-name');
+      const profileEmailEl = document.getElementById('display-profile-email');
+      
+      if (homeNameEl) homeNameEl.textContent = newName;
+      if (profileNameEl) profileNameEl.textContent = newName;
+      if (profileEmailEl) profileEmailEl.textContent = newEmail;
       
       closeModal('modal-edit-profile');
       showToast('success', 'Berhasil', 'Perubahan profil berhasil disimpan.');
     }
+
+    document.getElementById('btn-save-pin').addEventListener('click', () => {
+      const oldPin = document.getElementById('input-old-pin').value;
+      const newPin = document.getElementById('input-new-pin').value;
+
+      if (!oldPin || !newPin) return showToast('warning', 'Perhatian', 'Lengkapi kedua kolom PIN.');
+      if (newPin.length !== 6) return showToast('warning', 'Perhatian', 'PIN baru harus 6 digit.');
+      
+      if (oldPin === userSecurityPIN) {
+        userSecurityPIN = newPin; 
+        localStorage.setItem('smartwallet_pin', newPin); 
+        
+        closeModal('modal-change-pin');
+        document.getElementById('input-old-pin').value = '';
+        document.getElementById('input-new-pin').value = '';
+        
+        showToast('success', 'Berhasil', 'PIN keamanan berhasil diubah!');
+      } else {
+        showToast('error', 'Gagal', 'PIN lama yang Anda masukkan salah.');
+      }
+    });
 
   </script>
 </body>
