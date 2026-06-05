@@ -15,22 +15,11 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['DM Sans', 'sans-serif'],
-            serif: ['DM Serif Display', 'serif'],
-          },
+          fontFamily: { sans: ['DM Sans', 'sans-serif'], serif: ['DM Serif Display', 'serif'] },
           colors: {
             brand: {
-              50:  '#ecfdf5',
-              100: '#d1fae5',
-              200: '#a7f3d0',
-              300: '#6ee7b7',
-              400: '#34d399',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857',
-              800: '#065f46',
-              900: '#064e3b',
+              50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399',
+              500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b',
             }
           }
         }
@@ -40,23 +29,15 @@
 
   <style>
     * { -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: #e5e7eb;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: #e5e7eb; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
     .scroll-hidden::-webkit-scrollbar { display: none; }
     .scroll-hidden { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Card gradient & UI elements */
+    /* UI Elements */
     .card-gradient { background: linear-gradient(135deg, #065f46 0%, #0d7757 40%, #0f766e 100%); }
     .card-mesh::before {
       content: ''; position: absolute; inset: 0;
-      background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.07) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+      background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.07) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
       border-radius: inherit; pointer-events: none;
     }
     .card-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
@@ -68,35 +49,27 @@
     .action-btn:hover { transform: translateY(-1px); }
     .action-btn:active { transform: scale(0.95) translateY(0); }
 
-    /* Toast System */
-    #toast-container {
-      position: absolute; top: 0; left: 0; right: 0; z-index: 9999;
-      pointer-events: none; display: flex; flex-direction: column; align-items: center;
-      padding-top: 12px; gap: 8px;
-    }
+    /* Toasts & Animations */
+    #toast-container { position: absolute; top: 0; left: 0; right: 0; z-index: 9999; pointer-events: none; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 8px; }
     .toast { pointer-events: auto; animation: slideInTop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
     .toast.removing { animation: slideOutTop 0.35s ease-in forwards; }
-
-    /* Animations */
-    .bar-animated { width: 0%; animation: barFill 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; }
     .fade-up-1 { opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
     .fade-up-2 { opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards; }
     .fade-up-3 { opacity: 0; animation: fadeUp 0.5s ease 0.3s forwards; }
 
     @keyframes fadeUp { 0% { transform: translateY(16px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-    @keyframes barFill { 0% { width: 0%; } 100% { width: var(--bar-width); } }
     @keyframes slideInTop { 0% { transform: translateY(-120%) scale(0.92); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
     @keyframes slideOutTop { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120%) scale(0.92); opacity: 0; } }
     @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: 0.5; } }
     
-    /* Red Pulse Dot Logic */
-    .notif-dot-active::after {
-      content: ''; position: absolute; inset: -2px; border-radius: 50%;
-      border: 2px solid #ef4444; animation: pulseDot 2s ease-in-out infinite;
-    }
-
-    /* Panel Transition */
+    .notif-dot-active::after { content: ''; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid #ef4444; animation: pulseDot 2s ease-in-out infinite; }
     .panel-slide { transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .toggle-checkbox:checked { right: 0; border-color: #059669; }
+    .toggle-checkbox:checked + .toggle-label { background-color: #059669; }
+
+    /* Pure CSS Donut Chart Support */
+    .donut-chart { border-radius: 50%; background: conic-gradient(var(--p1) 0% var(--p1-end), var(--p2) var(--p1-end) var(--p2-end), var(--p3) var(--p2-end) var(--p3-end), var(--p4) var(--p3-end) 100%); }
+    .donut-hole { position: absolute; inset: 20%; background-color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
   </style>
 </head>
 
@@ -109,421 +82,1112 @@
     <div id="custom-modal" class="absolute inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="modal-card" class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300">
         <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-1">Judul</h3>
-        <p id="modal-desc" class="text-xs text-gray-500 mb-5">Deskripsi</p>
+        <p id="modal-desc" class="text-xs text-gray-500 mb-4">Deskripsi</p>
         
+        <div id="modal-category-container" class="mb-4 hidden">
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Kategori Transfer</label>
+          <select id="modal-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+            <option value="Makanan">Makanan</option>
+            <option value="Transportasi">Transportasi</option>
+            <option value="Tagihan">Tagihan</option>
+            <option value="Pulsa">Pulsa</option>
+            <option value="Top Up Game">Top Up Game</option>
+            <option value="Belanja">Belanja</option>
+            <option value="Hiburan">Hiburan</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
         <div class="relative mb-6">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">Rp</span>
-          <input type="text" inputmode="numeric" pattern="[0-9]*" id="modal-input" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-800 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all placeholder-gray-300" placeholder="0">
+          <input type="text" inputmode="numeric" id="modal-input" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-800 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder-gray-300" placeholder="0">
         </div>
-        
         <div class="flex gap-3">
-          <button id="btn-cancel" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button onclick="closeModal('custom-modal')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
           <button id="btn-confirm" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Konfirmasi</button>
         </div>
       </div>
     </div>
 
-    <div class="scroll-hidden overflow-y-auto flex-1 px-5 pt-12" style="padding-bottom: 100px;">
+    <div id="modal-pin-verify" class="absolute inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="modal-card-verify" class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <div class="w-16 h-16 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-lock"></i></div>
+        <h3 id="pin-verify-title" class="text-lg font-bold text-gray-800 mb-1">Verifikasi PIN</h3>
+        <p class="text-xs text-gray-500 mb-5">Masukkan 6 digit PIN keamanan Anda.</p>
+        <p class="text-xs text-gray-500 mb-5">(Default = 123456)</p>
+        <input type="password" inputmode="numeric" maxlength="6" id="input-verify-pin" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 px-4 text-center text-gray-800 font-bold text-2xl tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all mb-6" placeholder="••••••">
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-pin-verify')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button id="btn-submit-verify-pin" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Lanjut</button>
+        </div>
+      </div>
+    </div>
 
+    <div id="modal-change-pin" class="absolute inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="modal-card-change" class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Ubah PIN</h3>
+        <p class="text-xs text-gray-500 mb-5">PIN default saat ini adalah <span class="font-bold">123456</span>.</p>
+        <div class="space-y-3 mb-6">
+          <input type="password" inputmode="numeric" maxlength="6" id="input-old-pin" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-center text-gray-800 font-bold text-lg tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder-gray-400" placeholder="PIN Lama">
+          <input type="password" inputmode="numeric" maxlength="6" id="input-new-pin" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-center text-gray-800 font-bold text-lg tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder-gray-400" placeholder="PIN Baru">
+        </div>
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-change-pin')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button id="btn-save-pin" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-add-goal" class="absolute inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-left">
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Target Tabungan Baru</h3>
+        <p class="text-xs text-gray-500 mb-5">Tentukan nama, target, dan ikon tabunganmu.</p>
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Target</label>
+            <input type="text" id="goal-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder-gray-400" placeholder="Contoh: Liburan Bali">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Target Nominal (Rp)</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">Rp</span>
+              <input type="text" inputmode="numeric" pattern="[0-9]*" id="goal-amount" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 text-sm font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder-gray-400" placeholder="0">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Pilih Ikon</label>
+            <div class="grid grid-cols-5 gap-2" id="goal-icons">
+              <button class="icon-btn text-2xl py-2 bg-brand-50 rounded-xl border-2 border-brand-500 transition-all" onclick="selectGoalIcon(this, '✈️')">✈️</button>
+              <button class="icon-btn text-2xl py-2 bg-gray-50 rounded-xl border-2 border-transparent transition-all" onclick="selectGoalIcon(this, '💻')">💻</button>
+              <button class="icon-btn text-2xl py-2 bg-gray-50 rounded-xl border-2 border-transparent transition-all" onclick="selectGoalIcon(this, '🏠')">🏠</button>
+              <button class="icon-btn text-2xl py-2 bg-gray-50 rounded-xl border-2 border-transparent transition-all" onclick="selectGoalIcon(this, '🚗')">🚗</button>
+              <button class="icon-btn text-2xl py-2 bg-gray-50 rounded-xl border-2 border-transparent transition-all" onclick="selectGoalIcon(this, '📱')">📱</button>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-add-goal')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button onclick="saveGoal()" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Buat</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-deposit-goal" class="absolute inset-0 z-[110] flex items-end justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-full rounded-t-3xl p-6 shadow-2xl transform translate-y-full transition-transform duration-300">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-bold text-gray-800">Setor ke Tabungan</h3>
+          <button onclick="closeModal('modal-deposit-goal')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <p class="text-sm text-gray-500 mb-4">Uang akan dipotong dari Saldo Utama Anda.</p>
+        <div class="relative mb-6">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">Rp</span>
+          <input type="text" inputmode="numeric" id="deposit-amount" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-12 pr-4 text-gray-800 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all" placeholder="0">
+        </div>
+        <button onclick="executeDeposit()" class="w-full py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Konfirmasi Setoran</button>
+      </div>
+    </div>
+
+    <div id="modal-confirm-delete" class="absolute inset-0 z-[120] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-trash-can"></i></div>
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Hapus Target?</h3>
+        <p class="text-xs text-gray-500 mb-6 leading-relaxed">Apakah Anda yakin ingin menghapus target ini secara permanen? Seluruh dana yang sudah Anda setorkan akan dikembalikan ke saldo utama.</p>
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-confirm-delete')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button id="btn-execute-delete" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700 active:scale-95 transition-all">Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-no-contact" class="absolute inset-0 z-[120] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <div class="w-16 h-16 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-regular fa-address-book"></i></div>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">Kontak Kosong</h3>
+        <p class="text-xs text-gray-500 mb-6 leading-relaxed">Kamu harus menambahkan minimal 1 teman di Daftar Kontak sebelum bisa membuat tagihan Split Bill.</p>
+        <button onclick="closeModal('modal-no-contact'); setTimeout(() => openModal('modal-add-contact'), 300);" class="w-full py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Tambah Kontak Sekarang</button>
+      </div>
+    </div>
+
+    <div id="modal-confirm-delete-contact" class="absolute inset-0 z-[120] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-user-minus"></i></div>
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Hapus Kontak?</h3>
+        <p class="text-xs text-gray-500 mb-6 leading-relaxed">Apakah Anda yakin ingin menghapus teman ini dari daftar kontak?</p>
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-confirm-delete-contact')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button id="btn-execute-delete-contact" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700 active:scale-95 transition-all">Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-add-contact" class="absolute inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-left">
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Tambah Kontak</h3>
+        <p class="text-xs text-gray-500 mb-5">Masukkan nomor rekening teman untuk ditambahkan ke daftar kontak.</p>
+        <div class="mb-6">
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor Rekening</label>
+          <input type="text" inputmode="numeric" id="contact-rekening" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder-gray-400" placeholder="Contoh: 8765432109">
+        </div>
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-add-contact')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button onclick="saveContact()" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-add-splitbill" class="absolute inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-gray-50 w-full h-[85%] rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
+        <div class="px-6 py-4 bg-white flex justify-between items-center shadow-sm z-10">
+          <h3 class="text-lg font-bold text-gray-800">Buat Tagihan Split Bill</h3>
+          <button onclick="closeModal('modal-add-splitbill')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="overflow-y-auto px-5 py-5 space-y-4 pb-20">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Tagihan</label>
+            <input type="text" id="sb-name" class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm" placeholder="Contoh: Patungan Spotify">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Total Biaya Keseluruhan (Rp)</label>
+            <input type="text" inputmode="numeric" id="sb-total" class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-brand-500 outline-none font-bold text-lg" placeholder="0">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">Kategori Tagihan</label>
+            <select id="sb-category" class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-brand-500 outline-none text-sm font-bold text-gray-700">
+              <option value="Makanan">Makanan</option>
+              <option value="Liburan">Liburan</option>
+              <option value="Nonton">Nonton Bioskop</option>
+              <option value="Patungan">Patungan Umum</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="pt-4 border-t border-gray-200">
+            <p class="text-xs font-semibold text-gray-500 mb-3">Pilih Anggota Patungan</p>
+            <div id="sb-member-selection" class="space-y-2"></div>
+            <p class="text-[10px] text-brand-600 mt-3 text-center bg-brand-50 py-1.5 rounded-lg font-bold">*Sistem otomatis akan membagi rata tagihan.</p>
+          </div>
+        </div>
+        <div class="bg-white p-5 border-t border-gray-100 mt-auto">
+          <button onclick="saveSplitBill()" class="w-full py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Kirim Tagihan</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-detail-splitbill" class="absolute inset-0 z-[110] flex items-end justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-gray-50 w-full rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden max-h-[85%]">
+        <div class="px-6 py-4 bg-white flex justify-between items-center shadow-sm z-10">
+          <h3 class="text-lg font-bold text-gray-800">Detail Tagihan</h3>
+          <button onclick="closeModal('modal-detail-splitbill')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="overflow-y-auto px-5 py-5">
+          <div class="text-center mb-6">
+            <p id="det-sb-name" class="text-gray-500 text-sm font-medium mb-1">Makan Siang Bareng</p>
+            <p id="det-sb-total" class="text-3xl font-bold text-gray-800 font-serif">Rp 180.000</p>
+            <span id="det-sb-status" class="inline-block mt-2 text-xs font-bold px-3 py-1 rounded-full bg-rose-100 text-rose-600">Belum Lunas</span>
+          </div>
+          <h4 class="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">Status Pembayaran</h4>
+          <div id="det-sb-members-list" class="space-y-3 mb-6"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-confirm-pay" class="absolute inset-0 z-[120] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <div class="w-16 h-16 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-wallet"></i></div>
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Bayar Bagianmu?</h3>
+        <p class="text-xs text-gray-500 mb-6 leading-relaxed">Saldo utama kamu akan terpotong untuk melunasi bagian tagihan ini.</p>
+        <div class="flex gap-3">
+          <button onclick="closeModal('modal-confirm-pay')" class="flex-1 py-3.5 rounded-xl font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all">Batal</button>
+          <button id="btn-execute-pay" class="flex-1 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Bayar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-sb-completed" class="absolute inset-0 z-[120] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-[85%] rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+        <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center mx-auto mb-4 text-4xl"><i class="fa-solid fa-check-double"></i></div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Tagihan Lunas! 🎉</h3>
+        <p class="text-sm text-gray-500 mb-6 leading-relaxed">Selamat! Semua anggota telah menyelesaikan pembayaran. Tagihan ini telah dipindahkan ke riwayat "Selesai".</p>
+        <button onclick="closeModal('modal-sb-completed')" class="w-full py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition-all">Selesai</button>
+      </div>
+    </div>
+
+    <div id="modal-edit-profile" class="absolute inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-full rounded-t-3xl p-6 transform translate-y-full transition-transform">
+        <div class="flex justify-between mb-6 items-center">
+          <h3 class="font-bold text-lg text-gray-800">Edit Profil</h3>
+          <button onclick="closeModal('modal-edit-profile')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="space-y-4 mb-8">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">Nama Lengkap</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-user"></i></span>
+              <input type="text" id="edit-profile-name" value="User" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-gray-800 font-bold focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">Alamat Email</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-envelope"></i></span>
+              <input type="email" id="edit-profile-email" value="user@example.com" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-gray-800 font-bold focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">Nomor Telepon</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-phone"></i></span>
+              <input type="tel" id="edit-profile-phone" value="081234567890" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-gray-800 font-bold focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+        </div>
+        <button onclick="saveProfileData()" class="w-full py-3.5 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 active:scale-95 transition-all">Simpan Perubahan</button>
+      </div>
+    </div>
+
+    <div id="modal-privacy" class="absolute inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"><div class="bg-white w-full rounded-t-3xl p-6 transform translate-y-full transition-transform"><div class="flex justify-between mb-4"><h3 class="font-bold">Keamanan</h3><button onclick="closeModal('modal-privacy')" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button></div><div class="flex justify-between items-center mb-4"><span class="text-sm font-bold">Ubah PIN Keamanan</span><button onclick="closeModal('modal-privacy'); setTimeout(()=>openModal('modal-change-pin'),300)" class="px-3 py-1 bg-gray-100 rounded text-xs font-bold">Ubah</button></div><button onclick="closeModal('modal-privacy')" class="w-full py-3 bg-brand-50 text-brand-600 rounded-xl font-bold">Tutup</button></div></div>
+
+    <div id="modal-faq" class="absolute inset-0 z-[100] flex items-end justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-gray-50 w-full h-[85%] rounded-t-3xl transform translate-y-full transition-transform flex flex-col overflow-hidden">
+        <div class="p-5 bg-white flex justify-between items-center shadow-sm z-10">
+          <h3 class="font-bold text-lg text-gray-800">Bantuan & FAQ</h3>
+          <button onclick="closeModal('modal-faq')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="p-5 overflow-y-auto space-y-4 pb-10">
+          
+          <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <h4 class="font-bold text-sm text-brand-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-money-bill-transfer"></i> Bagaimana cara melakukan Transfer?</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">Gunakan tombol <strong>Transfer</strong> pada kartu saldo di halaman utama (Home). Pilih kategori transfer, masukkan nominal, dan konfirmasi dengan PIN Anda.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <h4 class="font-bold text-sm text-brand-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-people-arrows"></i> Apa itu fitur Split Bill?</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">Fitur ini memudahkan Anda membagi tagihan dengan teman (Bagi Rata). Tagihan akan dikirimkan ke kotak masuk mereka. Pastikan teman Anda sudah terdaftar di <strong>Daftar Kontak</strong>.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <h4 class="font-bold text-sm text-brand-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-bullseye"></i> Bagaimana sistem Tabungan bekerja?</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">Buat target tabungan dan lakukan setoran. Dana akan dipotong dari saldo utama Anda. Jika target dihapus, dana yang terkumpul akan <strong>dikembalikan utuh</strong> ke saldo utama.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+            <h4 class="font-bold text-sm text-brand-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-chart-pie"></i> Dari mana data Pengeluaran berasal?</h4>
+            <p class="text-xs text-gray-600 leading-relaxed">Halaman Pengeluaran (Expense) mencatat transaksi secara <strong>otomatis</strong> setiap kali Anda melakukan Top-Up, Transfer, Split Bill, atau menyetor uang ke Tabungan.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="view-home" class="scroll-hidden overflow-y-auto flex-1 px-5 pt-12 pb-28">
       <div class="pb-4 fade-up-1">
         <div class="flex items-center justify-between">
-          <button class="flex items-center gap-3 text-left focus:outline-none active:scale-95 transition-transform" onclick="openProfilePanel()">
-            <div class="relative">
-              <img src="https://api.dicebear.com/8.x/micah/svg?seed=User123&backgroundColor=065f46&skinColor=fcd3ba&hairColor=000000" alt="Foto Profil" class="w-11 h-11 rounded-full object-cover ring-2 ring-brand-800 ring-offset-2 bg-brand-800" />
-              <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white"></span>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 leading-none mb-0.5">Selamat Pagi</p>
-              <p class="text-sm font-semibold text-gray-800 leading-none">User</p>
-            </div>
-          </button>
-
-          <button id="notif-bell-btn" class="nav-btn relative w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-sm border border-gray-100" onclick="openNotifPanel()" aria-label="Notifikasi">
-            <i class="fa-regular fa-bell text-gray-600 text-base"></i>
-            <span id="notif-red-dot" class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white hidden"></span>
-          </button>
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full ring-2 ring-brand-800 ring-offset-2 bg-[#787878] overflow-hidden flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" class="w-full h-full">
+                <defs>
+                  <g id="clothes-rounded-7dff0831"><path d="M16 4.8v.47a5 5 0 0 0 10 0V4.8c7.06 1.52 12.93 6.74 16 13H0c3.07-6.26 8.94-11.48 16-13" fill="#7fa585"/></g>
+                  <clipPath id="clip-7dff0831"><rect width="64" height="64" rx="0" ry="0"/></clipPath>
+                </defs>
+                <g clip-path="url(#clip-7dff0831)">
+                  <rect width="64" height="64" fill="#787878"/>
+                  <path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14 14 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.97V27a14 14 0 1 1 28 0v1.03a4.5 4.5 0 0 1-.58 8.97A14 14 0 0 1 37 46.08" fill="#367240"/>
+                  <mask id="personas-a" style="mask-type:luminance"><path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14 14 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.97V27a14 14 0 1 1 28 0v1.03a4.5 4.5 0 0 1-.58 8.97A14 14 0 0 1 37 46.08" fill="white"/></mask>
+                  <g mask="url(#personas-a)"><path d="M32 13a14 14 0 0 1 14 14v6a14 14 0 1 1-28 0v-6a14 14 0 0 1 14-14" fill="white" opacity=".36" style="mix-blend-mode:overlay"/></g>
+                  <use transform="translate(11 46.2)" href="#clothes-rounded-7dff0831"/>
+                </g>
+              </svg>
+            </div><div><p class="text-xs text-gray-400">Selamat Pagi</p><p class="text-sm font-bold">User</p></div></div>
+          <button id="notif-bell-btn" class="nav-btn w-10 h-10 rounded-xl bg-white shadow-sm border border-gray-100 relative" onclick="openNotifPanel()"><i class="fa-regular fa-bell text-gray-600"></i><span id="notif-red-dot" class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full hidden"></span></button>
         </div>
       </div>
 
       <div class="pb-5 fade-up-2">
         <div class="card-gradient card-mesh relative rounded-3xl p-6 shadow-xl overflow-hidden">
           <div class="card-circle w-40 h-40 -top-16 -right-16 border-white/10"></div>
-          <div class="card-circle w-24 h-24 bottom-4 -left-8 border-white/8"></div>
-
-          <div class="relative flex items-center justify-between mb-6">
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
-                <i class="fa-solid fa-wallet text-white text-xs"></i>
-              </div>
-              <span class="text-white/80 text-xs font-medium tracking-widest uppercase">SmartWallet</span>
-            </div>
-          </div>
-
-          <div class="relative mb-6">
-            <p class="text-white/60 text-xs font-medium mb-1 tracking-wide">Total Saldo Anda</p>
-            <p id="balance-amount" class="text-white font-bold text-4xl tracking-tight cursor-pointer" style="font-family: 'DM Serif Display', serif;"></p>
-            <p class="text-emerald-300 text-xs mt-1.5 flex items-center gap-1">
-              <i class="fa-solid fa-arrow-trend-up text-xs"></i><span>Simulasi Dompet Interaktif</span>
-            </p>
-          </div>
-
-          <div class="relative mb-6"><p class="text-white/40 text-xs tracking-widest font-mono">•••• •••• •••• 4821</p></div>
-
+          <div class="relative flex items-center gap-2 mb-6"><div class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center"><i class="fa-solid fa-wallet text-white text-xs"></i></div><span class="text-white/80 text-xs font-medium tracking-widest uppercase">SmartWallet</span></div>
+          <div class="relative mb-4"><p class="text-white/60 text-xs font-medium mb-1">Total Saldo Anda</p><p id="balance-amount" class="text-white font-bold text-4xl cursor-pointer" style="font-family: 'DM Serif Display';"></p></div>
+          <div class="relative mb-6"><p class="text-white/80 text-xs tracking-widest font-mono">1234 5678 9012 4821</p></div>
           <div class="relative flex gap-3">
-            <button id="btn-topup" class="action-btn flex-1 flex items-center justify-center gap-2 bg-white rounded-xl py-3 shadow-md">
-              <i class="fa-solid fa-plus text-brand-800 text-sm"></i><span class="text-brand-800 font-semibold text-sm">Top-Up</span>
-            </button>
-            <button id="btn-transfer" class="action-btn flex-1 flex items-center justify-center gap-2 border border-white/40 rounded-xl py-3 backdrop-blur-sm" style="background: rgba(255,255,255,0.12);">
-              <i class="fa-solid fa-paper-plane text-white text-sm"></i><span class="text-white font-semibold text-sm">Transfer</span>
-            </button>
+            <button id="btn-topup" class="action-btn flex-1 flex items-center justify-center gap-2 bg-white rounded-xl py-3 shadow-md"><i class="fa-solid fa-plus text-brand-800 text-sm"></i><span class="text-brand-800 font-semibold text-sm">Top-Up</span></button>
+            <button id="btn-transfer" class="action-btn flex-1 flex items-center justify-center gap-2 border border-white/40 rounded-xl py-3" style="background: rgba(255,255,255,0.12);"><i class="fa-solid fa-paper-plane text-white text-sm"></i><span class="text-white font-semibold text-sm">Transfer</span></button>
           </div>
         </div>
       </div>
 
       <div class="pb-5 fade-up-3">
-        <div class="grid grid-cols-4 gap-3">
-          <button class="nav-btn flex flex-col items-center gap-2" onclick="triggerSplitBillReminder()">
-            <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center shadow-sm border border-blue-100"><i class="fa-solid fa-people-arrows text-blue-600 text-lg"></i></div><span class="text-[11px] text-gray-500 font-medium text-center leading-tight">Simulasi Bill</span>
-          </button>
-          <button class="nav-btn flex flex-col items-center gap-2" onclick="showToast('info', 'Tagihan', 'Fitur Lain disimulasikan!')">
-            <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center shadow-sm border border-orange-100"><i class="fa-solid fa-file-invoice-dollar text-orange-500 text-lg"></i></div><span class="text-[11px] text-gray-500 font-medium text-center leading-tight">Tagihan</span>
-          </button>
-          <button class="nav-btn flex flex-col items-center gap-2" onclick="showToast('info', 'Pulsa', 'Fitur Lain disimulasikan!')">
-            <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center shadow-sm border border-purple-100"><i class="fa-solid fa-mobile-screen text-purple-500 text-lg"></i></div><span class="text-[11px] text-gray-500 font-medium text-center leading-tight">Pulsa</span>
-          </button>
-          <button class="nav-btn flex flex-col items-center gap-2" onclick="showToast('info', 'Lainnya', 'Lainnya!')">
-            <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center shadow-sm border border-gray-200"><i class="fa-solid fa-ellipsis text-gray-500 text-lg"></i></div><span class="text-[11px] text-gray-500 font-medium text-center leading-tight">Lainnya</span>
-          </button>
-        </div>
+        <h3 class="text-sm font-bold text-gray-800 mb-3 px-1">Transfer Cepat (Speed Dial)</h3>
+        <div id="home-speed-dial" class="grid grid-cols-4 gap-3"></div>
       </div>
-
+      
       <div class="pb-5 fade-up-3">
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-4">
-            <div><h2 class="text-sm font-semibold text-gray-800">Batas Pengeluaran</h2><p class="text-xs text-gray-400 mt-0.5">Juni 2026</p></div>
-            <div class="text-right"><p class="text-xl font-bold text-brand-600" style="font-family: 'DM Serif Display', serif;">Rp 1.250.000</p><p class="text-xs text-gray-400 mt-0.5">Limit Rp 5.000.000</p></div>
-          </div>
-          <div class="mb-2">
-            <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-brand-600 bar-animated" style="--bar-width: 25%;"></div>
-            </div>
-          </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 flex items-center">
+          <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mr-3"><i class="fa-solid fa-lightbulb"></i></div>
+          <div><p class="text-sm font-bold text-gray-800">Tip Keuangan</p><p class="text-xs text-gray-500">Gunakan tabungan untuk capai targetmu!</p></div>
         </div>
       </div>
-    </div> <nav class="absolute bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md" style="border-top: 1px solid rgba(0,0,0,0.06);">
-      <div class="flex items-end justify-around px-4 pt-3 pb-6">
-        <button class="nav-btn flex flex-col items-center gap-1.5 group" onclick="showToast('info', 'Analisis', 'Halaman simulasi!')">
-          <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50"><i class="fa-solid fa-chart-pie text-gray-400 group-hover:text-brand-700 text-base"></i></div><span class="text-xs font-medium text-gray-400">Expense</span>
-        </button>
-        <button class="nav-btn flex flex-col items-center gap-1.5 group" onclick="triggerSplitBillReminder()">
-          <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50"><i class="fa-solid fa-people-arrows text-gray-400 group-hover:text-brand-700 text-base"></i></div><span class="text-xs font-medium text-gray-400">Split Bill</span>
-        </button>
-        <button class="nav-btn flex flex-col items-center gap-1.5 group -mt-6">
-          <div class="w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg shadow-brand-800/30" style="background: linear-gradient(135deg, #065f46, #0f766e);"><i class="fa-solid fa-house text-white text-lg"></i></div><span class="text-xs font-semibold text-brand-800">Home</span>
-        </button>
-        <button class="nav-btn flex flex-col items-center gap-1.5 group" onclick="showToast('info', 'Tabungan', 'Halaman simulasi!')">
-          <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50"><i class="fa-solid fa-piggy-bank text-gray-400 group-hover:text-brand-700 text-base"></i></div><span class="text-xs font-medium text-gray-400">Savings</span>
-        </button>
-        <button class="nav-btn flex flex-col items-center gap-1.5 group" onclick="openProfilePanel()">
-          <div class="w-9 h-9 flex items-center justify-center rounded-xl transition-colors group-hover:bg-brand-50"><i class="fa-regular fa-user text-gray-400 group-hover:text-brand-700 text-base"></i></div><span class="text-xs font-medium text-gray-400">Profile</span>
-        </button>
-      </div>
-    </nav>
+    </div> 
 
-    <div id="profile-panel" class="absolute top-0 left-0 w-full h-full bg-gray-50 z-[70] transform translate-x-full panel-slide flex flex-col">
-      <div class="px-5 pt-12 pb-4 bg-white flex items-center justify-between shadow-sm z-10">
-        <button onclick="closeProfilePanel()" class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full"><i class="fa-solid fa-chevron-left text-gray-700"></i></button>
-        <h2 class="text-base font-bold text-gray-800">Profil Saya</h2>
-        <div class="w-10"></div>
-      </div>
-      <div class="overflow-y-auto flex-1 px-5 pt-6 pb-20">
-        <div class="flex flex-col items-center mb-8">
-          <div class="relative mb-3">
-            <img src="https://api.dicebear.com/8.x/micah/svg?seed=User123&backgroundColor=065f46&skinColor=fcd3ba&hairColor=000000" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover shadow-lg border-4 border-white bg-brand-800" />
+    <div id="view-profile" class="hidden scroll-hidden overflow-y-auto flex-1 pt-8 pb-28">
+      <div class="px-5 pb-4 text-center relative"><h2 class="text-base font-bold">Profil Saya</h2></div>
+      <div class="px-5 pt-4">
+        <div class="flex flex-col items-center mb-8 fade-up-1">
+          <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg mb-3 bg-[#787878] overflow-hidden flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" class="w-full h-full">
+              <defs>
+                <g id="clothes-rounded-prof"><path d="M16 4.8v.47a5 5 0 0 0 10 0V4.8c7.06 1.52 12.93 6.74 16 13H0c3.07-6.26 8.94-11.48 16-13" fill="#7fa585"/></g>
+                <clipPath id="clip-prof"><rect width="64" height="64" rx="0" ry="0"/></clipPath>
+              </defs>
+              <g clip-path="url(#clip-prof)">
+                <rect width="64" height="64" fill="#787878"/>
+                <path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14 14 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.97V27a14 14 0 1 1 28 0v1.03a4.5 4.5 0 0 1-.58 8.97A14 14 0 0 1 37 46.08" fill="#367240"/>
+                <mask id="personas-prof" style="mask-type:luminance"><path d="M37 46.08V52a5 5 0 0 1-10 0v-5.92A14 14 0 0 1 18.58 37h-.08a4.5 4.5 0 0 1-.5-8.97V27a14 14 0 1 1 28 0v1.03a4.5 4.5 0 0 1-.58 8.97A14 14 0 0 1 37 46.08" fill="white"/></mask>
+                <g mask="url(#personas-prof)"><path d="M32 13a14 14 0 0 1 14 14v6a14 14 0 1 1-28 0v-6a14 14 0 0 1 14-14" fill="white" opacity=".36" style="mix-blend-mode:overlay"/></g>
+                <use transform="translate(11 46.2)" href="#clothes-rounded-prof"/>
+              </g>
+            </svg>
           </div>
-          <h3 class="text-xl font-bold text-gray-800">User</h3>
-          <p class="text-sm text-gray-500">user@example.com</p>
+          <h3 class="text-xl font-bold">User</h3><p class="text-sm text-gray-500">user@example.com</p>
         </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-          <button class="w-full flex items-center justify-between px-5 py-4 border-b border-gray-50 hover:bg-gray-50 text-left" onclick="showToast('info', 'Edit Profil', 'Fitur Diperbarui')">
-            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center"><i class="fa-regular fa-id-badge text-blue-600 text-sm"></i></div><span class="text-sm font-semibold text-gray-700">Edit Profil</span></div><i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
-          </button>
-          <button class="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 text-left" onclick="showToast('info', 'Keamanan', 'Fitur Keamanan')">
-            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center"><i class="fa-solid fa-shield-halved text-emerald-600 text-sm"></i></div><span class="text-sm font-semibold text-gray-700">Privasi & Keamanan</span></div><i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
-          </button>
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-6 fade-up-2">
+          <button onclick="openModal('modal-edit-profile')" class="w-full flex justify-between px-5 py-4 border-b border-gray-50 hover:bg-gray-50"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-regular fa-id-badge"></i></div><span class="text-sm font-semibold">Edit Profil</span></div><i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i></button>
+          <button onclick="openModal('modal-privacy')" class="w-full flex justify-between px-5 py-4 border-b border-gray-50 hover:bg-gray-50"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-shield-halved"></i></div><span class="text-sm font-semibold">Privasi & Keamanan</span></div><i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i></button>
+          <button onclick="openModal('modal-faq')" class="w-full flex justify-between px-5 py-4 hover:bg-gray-50"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center"><i class="fa-regular fa-circle-question"></i></div><span class="text-sm font-semibold">Bantuan & FAQ</span></div><i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i></button>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden fade-up-3">
+          <button onclick="logoutAction()" class="w-full flex justify-between px-5 py-4 hover:bg-rose-50"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center"><i class="fa-solid fa-arrow-right-from-bracket"></i></div><span class="text-sm font-semibold text-rose-600">Keluar (Log Out)</span></div></button>
         </div>
       </div>
+    </div> 
+
+    <div id="view-expense" class="hidden scroll-hidden overflow-y-auto flex-1 pt-10 pb-28 bg-white relative">
+      <div class="px-5 mb-6 flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-800">Pengeluaran</h2>
+        <button onclick="showToast('info', 'Filter Bulan', 'Fitur filter riwayat per bulan sedang disimulasikan.')" class="bg-gray-100 px-3 py-1.5 rounded-full text-xs font-bold text-gray-600 flex items-center gap-2 hover:bg-gray-200 active:scale-95 transition-all shadow-sm border border-gray-200">
+          <i class="fa-solid fa-calendar-days"></i> 
+          <span id="expense-month-label">Bulan Ini</span>
+        </button>
+      </div>
+      
+      <div class="px-5 mb-8 grid grid-cols-2 gap-3">
+        <div class="bg-rose-50 p-4 rounded-2xl border border-rose-100"><p class="text-xs text-rose-600 font-semibold mb-1">Total Keluar</p><p id="exp-total-out" class="text-lg font-bold text-rose-700">Rp 0</p></div>
+        <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100"><p class="text-xs text-emerald-600 font-semibold mb-1">Total Masuk</p><p id="exp-total-in" class="text-lg font-bold text-emerald-700">Rp 0</p></div>
+      </div>
+
+      <div class="px-5 mb-8 flex flex-col items-center">
+        <div class="relative w-48 h-48 donut-chart shadow-inner" id="exp-chart" style="--p1: #f43f5e; --p1-end: 0%; --p2: #f59e0b; --p2-end: 0%; --p3: #3b82f6; --p3-end: 0%; --p4: #8b5cf6;">
+          <div class="donut-hole shadow-sm">
+            <p class="text-xs text-gray-400 font-semibold">Aktivitas</p>
+            <p class="text-sm font-bold text-gray-800">Bulan Ini</p>
+          </div>
+        </div>
+  
+        <div id="exp-legenda" class="w-full mt-6 px-2"></div>
+      </div>
+
+      <div class="px-5 mb-4 border-b border-gray-100 pb-2"><h3 class="text-sm font-bold text-gray-800">Riwayat Transaksi</h3></div>
+      <div id="exp-tx-list" class="px-5 space-y-3"></div>
+    </div>
+
+    <div id="view-savings" class="hidden scroll-hidden overflow-y-auto flex-1 pt-10 pb-28 bg-gray-50 relative">
+      <div class="px-5 mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Tabungan Saya</h2>
+        <div class="bg-brand-600 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+          <div class="absolute right-[-20px] top-[-20px] opacity-20 text-8xl">🎯</div>
+          <p class="text-sm font-medium text-brand-100 mb-1">Total Tersimpan</p>
+          <p id="sav-total-saved" class="text-3xl font-bold font-serif">Rp 0</p>
+        </div>
+      </div>
+
+      <div class="px-5 flex justify-between items-center mb-4">
+        <h3 class="text-sm font-bold text-gray-800">Daftar Target</h3>
+        <button onclick="openModal('modal-add-goal')" class="text-xs font-bold text-brand-600 bg-brand-50 border border-brand-100 px-3 py-1.5 rounded-lg hover:bg-brand-100 transition-colors active:scale-95">+ Tambah</button>
+      </div>
+
+      <div id="sav-goals-list" class="px-5 space-y-4"></div>
+    </div>
+
+    <div id="view-splitbill" class="hidden flex-1 relative bg-white flex flex-col overflow-hidden">
+      <div class="scroll-hidden overflow-y-auto flex-1 pt-10 pb-28">
+        <div class="px-5 mb-6">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Split Bill</h2>
+          <div class="flex p-1 bg-gray-100 rounded-xl">
+            <button id="tab-sb-active" onclick="toggleSbTab('active')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow-sm text-brand-600 transition-all">Aktif</button>
+            <button id="tab-sb-settled" onclick="toggleSbTab('settled')" class="flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 transition-all">Selesai</button>
+          </div>
+        </div>
+
+        <div id="sb-list-container" class="px-5 space-y-4"></div>
+
+        <div class="px-5 mt-8 mb-4 border-t border-gray-100 pt-6 flex justify-between items-center">
+          <h3 class="text-sm font-bold text-gray-800">Daftar Kontak Teman</h3>
+          <button onclick="openModal('modal-add-contact')" class="text-xs font-bold text-brand-600 bg-brand-50 border border-brand-100 px-3 py-1.5 rounded-lg hover:bg-brand-100 active:scale-95 transition-all">+ Tambah</button>
+        </div>
+        <div id="contacts-list-container" class="px-5 space-y-3 pb-8"></div>
+      </div>
+
+      <button onclick="openAddSplitBillModal()" class="absolute bottom-36 right-5 w-14 h-14 bg-brand-600 text-white rounded-full shadow-lg flex items-center justify-center text-xl hover:bg-brand-700 active:scale-95 transition-all z-40"><i class="fa-solid fa-file-invoice"></i></button>
     </div>
 
     <div id="notif-panel" class="absolute top-0 left-0 w-full h-full bg-gray-50 z-[70] transform translate-x-full panel-slide flex flex-col">
       <div class="px-5 pt-12 pb-4 bg-white flex items-center justify-between shadow-sm z-10">
         <button onclick="closeNotifPanel()" class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full"><i class="fa-solid fa-chevron-left text-gray-700"></i></button>
         <h2 class="text-base font-bold text-gray-800">Notifikasi</h2>
-        
-        <button id="dnd-toggle-btn" onclick="toggleDND()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all text-xs font-semibold">
-          <i class="fa-solid fa-bell"></i>
-          <span id="dnd-status-text">Mute</span>
-        </button>
+        <button id="dnd-toggle-btn" onclick="toggleDND()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-semibold"><i class="fa-solid fa-bell"></i><span id="dnd-status-text">Mute</span></button>
       </div>
-
-      <div id="notif-list-container" class="overflow-y-auto flex-1 px-5 pt-4 pb-20 space-y-3">
-        </div>
+      <div id="notif-list-container" class="overflow-y-auto flex-1 px-5 pt-4 pb-20 space-y-3"></div>
     </div>
 
-  </div> <script>
-    // ── CONFIG & GLOBAL STATE ──
-    const toastContainer = document.getElementById('toast-container');
-    const notifListContainer = document.getElementById('notif-list-container');
-    const notifRedDot = document.getElementById('notif-red-dot');
-    const notifBellBtn = document.getElementById('notif-bell-btn');
-    const dndToggleBtn = document.getElementById('dnd-toggle-btn');
-    const dndStatusText = document.getElementById('dnd-status-text');
+    <nav class="absolute bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-t border-gray-100">
+      <div class="flex items-end justify-around px-4 pt-3 pb-6">
+        <button id="nav-btn-expense" class="nav-btn flex flex-col items-center gap-1.5 group" onclick="switchTab('expense')"><div id="nav-icon-expense" class="w-9 h-9 flex items-center justify-center rounded-xl"><i class="fa-solid fa-chart-pie text-gray-400 text-base"></i></div><span id="nav-text-expense" class="text-[10px] font-medium text-gray-400">Expense</span></button>
+        <button id="nav-btn-splitbill" class="nav-btn flex flex-col items-center gap-1.5 group" onclick="switchTab('splitbill')"><div id="nav-icon-splitbill" class="w-9 h-9 flex items-center justify-center rounded-xl"><i class="fa-solid fa-people-arrows text-gray-400 text-base"></i></div><span id="nav-text-splitbill" class="text-[10px] font-medium text-gray-400">Split Bill</span></button>
+        <button id="nav-btn-home" class="nav-btn flex flex-col items-center gap-1.5 group -mt-6" onclick="switchTab('home')"><div id="nav-icon-home" class="w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg" style="background: linear-gradient(135deg, #065f46, #0f766e);"><i class="fa-solid fa-house text-white text-lg"></i></div><span id="nav-text-home" class="text-xs font-semibold text-brand-800">Home</span></button>
+        <button id="nav-btn-savings" class="nav-btn flex flex-col items-center gap-1.5 group" onclick="switchTab('savings')"><div id="nav-icon-savings" class="w-9 h-9 flex items-center justify-center rounded-xl"><i class="fa-solid fa-piggy-bank text-gray-400 text-base"></i></div><span id="nav-text-savings" class="text-[10px] font-medium text-gray-400">Savings</span></button>
+        <button id="nav-btn-profile" class="nav-btn flex flex-col items-center gap-1.5 group" onclick="switchTab('profile')"><div id="nav-icon-profile" class="w-9 h-9 flex items-center justify-center rounded-xl"><i class="fa-regular fa-user text-gray-400 text-base"></i></div><span id="nav-text-profile" class="text-[10px] font-medium text-gray-400">Profile</span></button>
+      </div>
+    </nav>
 
-    let isDNDActive = false; // Status Do Not Disturb
-    let notificationsData = []; // Penyimpanan notifikasi dinamis (Mulai dari KOSONG)
+  </div>
 
-    const toastConfig = {
-      success: { icon: 'fa-circle-check', bg: 'from-emerald-600 to-teal-600', ring: 'ring-emerald-400/30' },
-      info: { icon: 'fa-circle-info', bg: 'from-brand-800 to-brand-700', ring: 'ring-brand-400/30' },
-      warning: { icon: 'fa-triangle-exclamation', bg: 'from-amber-500 to-orange-500', ring: 'ring-amber-400/30' },
-      error: { icon: 'fa-circle-xmark', bg: 'from-rose-600 to-red-600', ring: 'ring-rose-400/30' },
-    };
-
-    // ── TOAST SYSTEM WITH DND CHECK ──
-    function showToast(type, title, message) {
-      // Jika DND aktif, tidak akan menampilkan banner push notification (toast) ke layar luar
-      if (isDNDActive) {
-        console.log("Push Notification dibungkam karena DND Aktif.");
-        return;
+  <script>
+    // ── CORE UTILS ──
+    const formatRupiah = (num) => new Intl.NumberFormat('id-ID').format(num);
+    const unformatRupiah = (str) => parseInt(str.replace(/[^0-9]/g, '')) || 0;
+    
+    // ── LOCAL STORAGE ENGINE ──
+    function initData() {
+      if (!localStorage.getItem('sw_transactions')) {
+        localStorage.setItem('sw_transactions', JSON.stringify([]));
       }
+      if (!localStorage.getItem('sw_goals')) {
+        localStorage.setItem('sw_goals', JSON.stringify([]));
+      }
+      if (!localStorage.getItem('sw_split_bills_cleared')) {
+        localStorage.setItem('sw_split_bills', JSON.stringify([]));
+        localStorage.setItem('sw_split_bills_cleared', 'true');
+      }
+      if (!localStorage.getItem('sw_contacts')) {
+        localStorage.setItem('sw_contacts', JSON.stringify([]));
+      }
+    }
+    initData();
 
-      const cfg = toastConfig[type] || toastConfig.info;
+    // ── TOAST SYSTEM ──
+    const toastContainer = document.getElementById('toast-container');
+    let isDNDActive = false; 
+    function showToast(type, title, message) {
+      if (isDNDActive) return;
+      const cfg = {
+        success: { icon: 'fa-circle-check', bg: 'from-emerald-600 to-teal-600', ring: 'ring-emerald-400/30' },
+        info: { icon: 'fa-circle-info', bg: 'from-brand-800 to-brand-700', ring: 'ring-brand-400/30' },
+        warning: { icon: 'fa-triangle-exclamation', bg: 'from-amber-500 to-orange-500', ring: 'ring-amber-400/30' },
+        error: { icon: 'fa-circle-xmark', bg: 'from-rose-600 to-red-600', ring: 'ring-rose-400/30' },
+      }[type] || { icon: 'fa-circle-info', bg: 'from-brand-800 to-brand-700', ring: 'ring-brand-400/30' };
+      
       const el = document.createElement('div');
       el.className = `toast flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl ring-1 ${cfg.ring} text-white max-w-xs w-[85%]`;
       el.style.background = `linear-gradient(135deg, var(--tw-gradient-stops))`;
       el.classList.add('bg-gradient-to-br', ...cfg.bg.split(' '));
-      el.innerHTML = `
-        <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"><i class="fa-solid ${cfg.icon} text-white text-sm"></i></div>
-        <div class="flex-1 min-w-0"><p class="text-xs font-semibold leading-tight">${title}</p><p class="text-xs text-white/80 leading-tight mt-0.5 truncate">${message}</p></div>
-        <button onclick="dismissToast(this.closest('.toast'))" class="w-5 h-5 flex items-center justify-center opacity-60 hover:opacity-100 flex-shrink-0"><i class="fa-solid fa-xmark text-xs"></i></button>
-      `;
+      el.innerHTML = `<div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"><i class="fa-solid ${cfg.icon} text-white text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-xs font-semibold leading-tight">${title}</p><p class="text-xs text-white/80 leading-tight mt-0.5 truncate">${message}</p></div>`;
       toastContainer.appendChild(el);
-      const timer = setTimeout(() => dismissToast(el), 3500);
-      el._timer = timer;
+      setTimeout(() => { el.classList.add('removing'); el.addEventListener('animationend', () => el.remove()); }, 3000);
     }
 
-    function dismissToast(el) {
-      if (!el || el.classList.contains('removing')) return;
-      clearTimeout(el._timer);
-      el.classList.add('removing');
-      el.addEventListener('animationend', () => el.remove(), { once: true });
+    // ── MODAL UTILS ──
+    function openModal(modalId) {
+      const m = document.getElementById(modalId); m.classList.remove('opacity-0', 'pointer-events-none');
+      const c = m.querySelector('div');
+      if(c.classList.contains('translate-y-full')) c.classList.remove('translate-y-full');
+      else if (c.classList.contains('scale-95')) { c.classList.remove('scale-95'); c.classList.add('scale-100'); }
+    }
+    function closeModal(modalId) {
+      const m = document.getElementById(modalId); m.classList.add('opacity-0', 'pointer-events-none');
+      const c = m.querySelector('div');
+      if(c.classList.contains('rounded-t-3xl')) c.classList.add('translate-y-full');
+      else if (c.classList.contains('scale-100')) { c.classList.remove('scale-100'); c.classList.add('scale-95'); }
     }
 
-    // ── TOGGLE DO NOT DISTURB (DND) ──
+    // ── NAVIGATION TAB SYSTEM ──
+    function switchTab(tabId) {
+      const tabs = ['home', 'profile', 'expense', 'savings', 'splitbill'];
+      tabs.forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const icon = document.getElementById(`nav-icon-${t}`);
+        const text = document.getElementById(`nav-text-${t}`);
+        const btn = document.getElementById(`nav-btn-${t}`);
+        
+        if (t === 'home') {
+          icon.style.background = '#f3f4f6'; icon.classList.remove('shadow-lg'); icon.querySelector('i').classList.replace('text-white', 'text-gray-500');
+          text.classList.replace('text-brand-800', 'text-gray-500'); text.classList.replace('font-medium', 'font-semibold'); btn.classList.remove('-mt-6');
+        } else {
+          icon.classList.remove('bg-brand-50'); icon.querySelector('i').classList.replace('text-brand-700', 'text-gray-400');
+          text.classList.replace('text-brand-700', 'text-gray-400');
+        }
+      });
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      const actIcon = document.getElementById(`nav-icon-${tabId}`);
+      const actText = document.getElementById(`nav-text-${tabId}`);
+      const actBtn = document.getElementById(`nav-btn-${tabId}`);
+
+      if (tabId === 'home') {
+        actIcon.style.background = 'linear-gradient(135deg, #065f46, #0f766e)'; actIcon.classList.add('shadow-lg'); actIcon.querySelector('i').classList.replace('text-gray-500', 'text-white');
+        actText.classList.replace('text-gray-500', 'text-brand-800'); actText.classList.replace('font-medium', 'font-semibold'); actBtn.classList.add('-mt-6');
+      } else {
+        actIcon.classList.add('bg-brand-50'); actIcon.querySelector('i').classList.replace('text-gray-400', 'text-brand-700');
+        actText.classList.replace('text-gray-400', 'text-brand-700');
+      }
+
+      if(tabId === 'expense') renderExpense();
+      if(tabId === 'savings') renderSavings();
+      if(tabId === 'splitbill') renderSplitBill();
+    }
+
+    // ── NOTIFICATIONS ──
+    let notificationsData = []; 
+    function insertNewNotification(type, title, desc) {
+      notificationsData.unshift({ id: Date.now(), type, title, desc, time: 'Baru saja', unread: true });
+      document.getElementById('notif-red-dot').classList.remove('hidden'); document.getElementById('notif-bell-btn').classList.add('notif-dot-active');
+      showToast(type, title, desc); renderNotificationsPanel();
+    }
+    function renderNotificationsPanel() {
+      const container = document.getElementById('notif-list-container');
+      if (notificationsData.length === 0) {
+        container.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-center px-4"><div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4 text-gray-300"><i class="fa-regular fa-bell-slash text-2xl"></i></div><p class="text-sm font-bold text-gray-700">Belum Ada Notifikasi</p></div>`; return;
+      }
+      container.innerHTML = notificationsData.map(notif => {
+        let l = 'bg-brand-500', c = 'bg-emerald-50', i = 'fa-check text-emerald-500';
+        if (notif.type === 'warning') { l = 'bg-rose-500'; c = 'bg-rose-50'; i = 'fa-triangle-exclamation text-rose-500'; } 
+        else if (notif.type === 'info') { l = 'bg-blue-500'; c = 'bg-blue-50'; i = 'fa-file-invoice-dollar text-blue-500'; }
+        return `<div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden"><div class="absolute top-0 left-0 w-1 h-full ${l}"></div><div class="flex gap-3"><div class="w-10 h-10 rounded-full ${c} flex items-center justify-center flex-shrink-0"><i class="fa-solid ${i} text-sm"></i></div><div class="flex-1"><div class="flex justify-between items-start"><p class="text-sm font-bold text-gray-800 leading-tight mb-1">${notif.title}</p>${notif.unread ? '<span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>' : ''}</div><p class="text-xs text-gray-500 leading-relaxed">${notif.desc}</p><p class="text-[10px] text-gray-400 mt-2 font-medium">${notif.time}</p></div></div></div>`;
+      }).join('');
+    }
+    function openNotifPanel() { 
+      document.getElementById('notif-panel').classList.remove('translate-x-full'); 
+      document.getElementById('notif-red-dot').classList.add('hidden'); document.getElementById('notif-bell-btn').classList.remove('notif-dot-active');
+      notificationsData.forEach(n => n.unread = false); renderNotificationsPanel();
+    }
+    function closeNotifPanel() { document.getElementById('notif-panel').classList.add('translate-x-full'); }
     function toggleDND() {
       isDNDActive = !isDNDActive;
-      if (isDNDActive) {
-        dndToggleBtn.classList.remove('bg-gray-100', 'text-gray-500', 'hover:bg-gray-200');
-        dndToggleBtn.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600');
-        dndStatusText.textContent = "Muted";
-        showToast('info', 'DND Aktif', 'Semua banner notifikasi luar telah dibungkam.');
-      } else {
-        dndToggleBtn.classList.remove('bg-red-500', 'text-white', 'hover:bg-red-600');
-        dndToggleBtn.classList.add('bg-gray-100', 'text-gray-500', 'hover:bg-gray-200');
-        dndStatusText.textContent = "Mute";
-        showToast('success', 'DND Nonaktif', 'Banner notifikasi kembali normal.');
-      }
+      const btn = document.getElementById('dnd-toggle-btn');
+      if (isDNDActive) { btn.classList.remove('bg-gray-100', 'text-gray-500'); btn.classList.add('bg-red-500', 'text-white'); document.getElementById('dnd-status-text').textContent = "Muted"; } 
+      else { btn.classList.remove('bg-red-500', 'text-white'); btn.classList.add('bg-gray-100', 'text-gray-500'); document.getElementById('dnd-status-text').textContent = "Mute"; }
     }
 
-    // ── ENGINE PENGATURAN DATA NOTIFIKASI (DINAMIS) ──
-    function insertNewNotification(type, title, desc) {
-      // Masukkan objek notifikasi baru ke tumpukan paling atas
-      notificationsData.unshift({
-        id: Date.now(),
-        type: type, // 'warning', 'info', 'success'
-        title: title,
-        desc: desc,
-        time: 'Baru saja',
-        unread: true
-      });
-
-      // Hidupkan Red Pulse Dot di tombol luar
-      notifRedDot.classList.remove('hidden');
-      notifBellBtn.classList.add('notif-dot-active');
-
-      // Tembakkan banner toast
-      showToast(type, title, desc);
-
-      // Render ulang isi panelnya
-      renderNotificationsPanel();
-    }
-
-    function renderNotificationsPanel() {
-      // Jika data kosong, tampilkan ilustrasi Empty State yang rapi
-      if (notificationsData.length === 0) {
-        notifListContainer.innerHTML = `
-          <div class="flex flex-col items-center justify-center py-20 text-center px-4">
-            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4 text-gray-300">
-              <i class="fa-regular fa-bell-slash text-2xl"></i>
-            </div>
-            <p class="text-sm font-bold text-gray-700">Belum Ada Notifikasi</p>
-            <p class="text-xs text-gray-400 mt-1 max-w-[200px]">Notifikasi transaksi dan pengingat Anda akan muncul di sini setelah digunakan.</p>
-          </div>
-        `;
-        return;
-      }
-
-      // Jika ada falls, render satu per satu komponennya
-      let htmlString = '';
-      notificationsData.forEach(notif => {
-        let leftBarColor = 'bg-brand-500';
-        let circleBg = 'bg-emerald-50';
-        let iconClass = 'fa-check text-emerald-500';
-
-        if (notif.type === 'warning') {
-          leftBarColor = 'bg-rose-500';
-          circleBg = 'bg-rose-50';
-          iconClass = 'fa-triangle-exclamation text-rose-500';
-        } else if (notif.type === 'info') {
-          leftBarColor = 'bg-blue-500';
-          circleBg = 'bg-blue-50';
-          iconClass = 'fa-file-invoice-dollar text-blue-500';
-        }
-
-        htmlString += `
-          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden transition-all duration-300">
-            <div class="absolute top-0 left-0 w-1 h-full ${leftBarColor}"></div>
-            <div class="flex gap-3">
-              <div class="w-10 h-10 rounded-full ${circleBg} flex items-center justify-center flex-shrink-0">
-                <i class="fa-solid ${iconClass} text-sm"></i>
-              </div>
-              <div class="flex-1">
-                <div class="flex justify-between items-start">
-                  <p class="text-sm font-bold text-gray-800 leading-tight mb-1">${notif.title}</p>
-                  ${notif.unread ? '<span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>' : ''}
-                </div>
-                <p class="text-xs text-gray-500 leading-relaxed">${notif.desc}</p>
-                <p class="text-[10px] text-gray-400 mt-2 font-medium">${notif.time}</p>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-      notifListContainer.innerHTML = htmlString;
-    }
-
-    // Awal load aplikasi: Panggil render agar kondisi awal kosong/empty-state langsung terbentuk
-    renderNotificationsPanel();
-
-    // ── PANEL NAVIGATION LOGIC ──
-    const profilePanel = document.getElementById('profile-panel');
-    const notifPanel = document.getElementById('notif-panel');
-    function openProfilePanel() { profilePanel.classList.remove('translate-x-full'); }
-    function closeProfilePanel() { profilePanel.classList.add('translate-x-full'); }
-    
-    function openNotifPanel() { 
-      notifPanel.classList.remove('translate-x-full'); 
-      
-      // LOGIKA TERBACA: Saat panel notifikasi dibuka, matikan semua red pulse dot di luar
-      notifRedDot.classList.add('hidden');
-      notifBellBtn.classList.remove('notif-dot-active');
-
-      // Set semua notifikasi di dalam data menjadi sudah dibaca (unread = false)
-      notificationsData.forEach(notif => notif.unread = false);
-      renderNotificationsPanel();
-    }
-    function closeNotifPanel() { notifPanel.classList.add('translate-x-full'); }
-
-    // ── BALANCE LOGIC & TRIGGER EVENT SALDO RENDAH ──
     let currentBalance = parseInt(localStorage.getItem('smartwallet_balance')) || 5000000;
-    const balanceEl = document.getElementById('balance-amount');
-    const btnTopUp = document.getElementById('btn-topup');
-    const btnTransfer = document.getElementById('btn-transfer');
+    let userSecurityPIN = localStorage.getItem('smartwallet_pin') || '123456';
+    let balanceVisible = true; 
     
-    let balanceVisible = false; 
-    let lowBalanceNotified = false;
-
-    function formatRupiah(number) { return new Intl.NumberFormat('id-ID').format(number); }
-
     function updateBalanceUI() {
-      if (balanceVisible) {
-        balanceEl.textContent = 'Rp ' + formatRupiah(currentBalance);
-        balanceEl.style.letterSpacing = '-0.02em';
-      } else {
-        balanceEl.textContent = 'Rp •••.•••.•••';
-        balanceEl.style.letterSpacing = '0.1em';
-      }
-      
-      // LOGIKA EVENT-DRIVEN: Otomatis memicu notifikasi jika saldo jatuh di bawah Rp 500.000
-      if (currentBalance < 500000 && !lowBalanceNotified) {
-        setTimeout(() => {
-          insertNewNotification('warning', 'Peringatan Saldo Rendah', `Saldo Anda tersisa Rp ${formatRupiah(currentBalance)}. Segera top-up dompet Anda!`);
-        }, 800);
-        lowBalanceNotified = true;
-      } else if (currentBalance >= 500000) {
-        lowBalanceNotified = false; // Reset status jika user top-up lagi
-      }
+      const el = document.getElementById('balance-amount');
+      if (balanceVisible) { el.textContent = 'Rp ' + formatRupiah(currentBalance); el.style.letterSpacing = '-0.02em'; } 
+      else { el.textContent = 'Rp •••.•••.•••'; el.style.letterSpacing = '0.1em'; }
+      localStorage.setItem('smartwallet_balance', currentBalance);
     }
-
+    document.getElementById('balance-amount').addEventListener('click', () => { balanceVisible = !balanceVisible; updateBalanceUI(); });
     updateBalanceUI();
-    balanceEl.addEventListener('click', () => { balanceVisible = !balanceVisible; updateBalanceUI(); });
 
-    // ── CUSTOM MODAL LOGIC ──
-    const customModal = document.getElementById('custom-modal');
-    const modalCard = document.getElementById('modal-card');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-desc');
-    const modalInput = document.getElementById('modal-input');
-    let currentAction = '';
+    let pendingTxAmount = 0, currentAction = '', pendingTxCategory = '';
+    
+    function renderSpeedDial() {
+      const txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
+      
+      const outTxs = txs.filter(t => t.type === 'out' && t.category !== 'Tabungan');
+      
+      const catCounts = {};
+      outTxs.forEach(t => { catCounts[t.category] = (catCounts[t.category] || 0) + 1; });
 
-    function openModal(action, title, desc) {
-      currentAction = action; modalTitle.textContent = title; modalDesc.textContent = desc; modalInput.value = '';
-      customModal.classList.remove('opacity-0', 'pointer-events-none');
-      modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100');
-      setTimeout(() => modalInput.focus(), 100);
+      const sortedCats = Object.keys(catCounts).sort((a, b) => catCounts[b] - catCounts[a]).slice(0, 4);
+      const container = document.getElementById('home-speed-dial');
+      
+      if (sortedCats.length === 0) {
+         container.innerHTML = `<div class="col-span-4 text-center py-4 bg-gray-50 rounded-xl border border-dashed border-gray-200"><p class="text-xs font-semibold text-gray-400">Belum ada riwayat transfer</p></div>`;
+         return;
+      }
+
+      const iconMap = {
+         'Makanan': { icon: 'fa-utensils', color: 'text-orange-500', bg: 'bg-orange-50' },
+         'Transportasi': { icon: 'fa-car', color: 'text-sky-500', bg: 'bg-sky-50' },
+         'Tagihan': { icon: 'fa-file-invoice', color: 'text-purple-500', bg: 'bg-purple-50' },
+         'Pulsa': { icon: 'fa-mobile-screen', color: 'text-rose-500', bg: 'bg-rose-50' },
+         'Top Up Game': { icon: 'fa-gamepad', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+         'Belanja': { icon: 'fa-bag-shopping', color: 'text-pink-500', bg: 'bg-pink-50' },
+         'Hiburan': { icon: 'fa-masks-theater', color: 'text-indigo-500', bg: 'bg-indigo-50' }, // Ikon kustom hiburan
+         'Liburan': { icon: 'fa-plane', color: 'text-blue-500', bg: 'bg-blue-50' },
+         'Nonton': { icon: 'fa-film', color: 'text-red-500', bg: 'bg-red-50' },
+         'Patungan': { icon: 'fa-people-arrows', color: 'text-teal-500', bg: 'bg-teal-50' },
+         'Lainnya': { icon: 'fa-ellipsis', color: 'text-gray-500', bg: 'bg-gray-100' }
+      };
+
+      container.innerHTML = sortedCats.map(cat => {
+         const style = iconMap[cat] || iconMap['Lainnya'];
+         return `
+           <button class="nav-btn flex flex-col items-center gap-2" onclick="openTransferWithCategory('${cat}')">
+             <div class="w-12 h-12 rounded-2xl ${style.bg} flex items-center justify-center ${style.color} text-lg shadow-sm border border-white"><i class="fa-solid ${style.icon}"></i></div>
+             <span class="text-[10px] text-gray-700 font-bold text-center leading-tight truncate w-full px-1">${cat}</span>
+           </button>
+         `;
+      }).join('');
     }
-    function closeModal() {
-      customModal.classList.add('opacity-0', 'pointer-events-none');
-      modalCard.classList.remove('scale-100'); modalCard.classList.add('scale-95'); modalInput.blur();
+
+    function openTransferWithCategory(category) {
+      currentAction = 'transfer';
+      document.getElementById('modal-title').textContent = `Transfer (${category})`;
+      document.getElementById('modal-desc').textContent = 'Masukkan nominal.';
+      document.getElementById('modal-category-container').classList.add('hidden');
+      document.getElementById('modal-category').value = category;
+      document.getElementById('modal-input').value = ''; 
+      openModal('custom-modal');
     }
 
-    btnTopUp.addEventListener('click', () => openModal('topup', 'Top-Up Saldo', 'Masukkan nominal uang yang ingin ditambahkan.'));
-    btnTransfer.addEventListener('click', () => openModal('transfer', 'Transfer Uang', 'Masukkan nominal yang ingin dikirim.'));
-    document.getElementById('btn-cancel').addEventListener('click', closeModal);
-    customModal.addEventListener('click', (e) => { if (e.target === customModal) closeModal(); });
-    modalInput.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+    ['input-verify-pin', 'modal-input'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+    });
+    
+    document.getElementById('btn-topup').addEventListener('click', () => { 
+      currentAction = 'topup'; document.getElementById('modal-title').textContent = 'Top-Up Saldo'; 
+      document.getElementById('modal-desc').textContent = 'Masukkan nominal uang.'; 
+      document.getElementById('modal-category-container').classList.add('hidden');
+      document.getElementById('modal-input').value = ''; openModal('custom-modal'); 
+    });
+    
+    document.getElementById('btn-transfer').addEventListener('click', () => { 
+      currentAction = 'transfer'; document.getElementById('modal-title').textContent = 'Transfer Uang'; 
+      document.getElementById('modal-desc').textContent = 'Pilih kategori dan masukkan nominal.'; 
+      document.getElementById('modal-category-container').classList.remove('hidden');
+      document.getElementById('modal-input').value = ''; openModal('custom-modal'); 
+    });
 
     document.getElementById('btn-confirm').addEventListener('click', () => {
-      const amount = parseInt(modalInput.value);
-      if (!amount || amount <= 0 || isNaN(amount)) { showToast('error', 'Gagal', 'Masukkan nominal yang valid.'); return; }
+      const amt = parseInt(document.getElementById('modal-input').value);
+      if (!amt || amt <= 0) return showToast('error', 'Gagal', 'Nominal tidak valid.');
+      if (currentAction === 'transfer' && amt > currentBalance) return showToast('warning', 'Gagal', 'Saldo tidak mencukupi.');
+      
+      pendingTxAmount = amt; 
+      pendingTxCategory = currentAction === 'transfer' ? document.getElementById('modal-category').value : 'Top-Up';
+      closeModal('custom-modal');
+      
+      setTimeout(() => {
+        document.getElementById('pin-verify-title').textContent = currentAction === 'topup' ? 'Verifikasi PIN Top-Up' : 'Verifikasi PIN Transfer';
+        document.getElementById('input-verify-pin').value = ''; openModal('modal-pin-verify');
+      }, 300);
+    });
 
-      if (currentAction === 'topup') {
-        currentBalance += amount; localStorage.setItem('smartwallet_balance', currentBalance);
-        updateBalanceUI();
+    document.getElementById('btn-submit-verify-pin').addEventListener('click', () => {
+      if (document.getElementById('input-verify-pin').value === userSecurityPIN) {
+        let txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
         
-        // Memasukkan log notifikasi sukses Top Up secara dinamis
-        insertNewNotification('success', 'Top-Up Berhasil', `Berhasil menambahkan Rp ${formatRupiah(amount)} ke saldo Anda.`);
-        closeModal();
-      } 
-      else if (currentAction === 'transfer') {
-        if (amount <= currentBalance) {
-          currentBalance -= amount; localStorage.setItem('smartwallet_balance', currentBalance);
-          updateBalanceUI();
-          
-          // Memasukkan log notifikasi sukses Transfer secara dinamis
-          insertNewNotification('success', 'Transfer Berhasil', `Berhasil mengirim uang sebesar Rp ${formatRupiah(amount)}.`);
-          closeModal();
+        if (currentAction === 'topup') { 
+          currentBalance += pendingTxAmount; 
+          txs.unshift({ id: Date.now(), name: 'Top-Up Saldo', amount: pendingTxAmount, type: 'in', category: 'Pemasukan', date: 'Hari ini' });
+          insertNewNotification('success', 'Top-Up Berhasil', `Ditambahkan Rp ${formatRupiah(pendingTxAmount)}`); 
         } else { 
-          showToast('warning', 'Transfer Gagal', 'Saldo Anda tidak mencukupi.'); 
+          currentBalance -= pendingTxAmount; 
+          txs.unshift({ id: Date.now(), name: `Transfer: ${pendingTxCategory}`, amount: pendingTxAmount, type: 'out', category: pendingTxCategory, date: 'Hari ini' });
+          insertNewNotification('success', 'Transfer Berhasil', `Dikirim Rp ${formatRupiah(pendingTxAmount)}`); 
         }
+        
+        localStorage.setItem('sw_transactions', JSON.stringify(txs));
+        updateBalanceUI(); closeModal('modal-pin-verify'); 
+        pendingTxAmount = 0; 
+        
+        renderSpeedDial(); 
+        renderExpense();
+      } else { showToast('error', 'Gagal', 'PIN salah.'); }
+    });
+
+    // ── EXPENSE TRACKER LOGIC ──
+    let txTypeAdd = 'out';
+    function setTxType(type) {
+      txTypeAdd = type;
+      if(type === 'out') { document.getElementById('btn-type-out').className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow-sm text-brand-600"; document.getElementById('btn-type-in').className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500"; }
+      else { document.getElementById('btn-type-in').className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow-sm text-brand-600"; document.getElementById('btn-type-out').className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500"; }
+    }
+    
+    function renderExpense() {
+      // Logika Waktu Dinamis
+      const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      const now = new Date();
+      const monthLabel = document.getElementById('expense-month-label');
+      if (monthLabel) {
+        monthLabel.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+      }
+
+      const txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
+      let totIn = 0, totOut = 0;
+      
+      // Pilar Utama Kalkulasi Chart
+      let breakdown = { 'Top-Up': 0, 'Transfer': 0, 'Split Bill': 0, 'Savings': 0 };
+      
+      const listHtml = txs.map(t => {
+        if(t.type === 'in') { totIn += t.amount; } 
+        else { totOut += t.amount; }
+        
+        if (t.name.includes('Top-Up')) breakdown['Top-Up'] += t.amount;
+        else if (t.name.includes('Transfer')) breakdown['Transfer'] += t.amount;
+        else if (t.name.includes('Split Bill')) breakdown['Split Bill'] += t.amount;
+        else if (t.name.includes('Savings')) breakdown['Savings'] += t.amount;
+        
+        const isOut = t.type === 'out';
+        const color = isOut ? 'rose' : 'emerald'; const sign = isOut ? '-' : '+';
+        let icon = 'fa-wallet';
+        
+        if(t.category === 'Makanan') icon = 'fa-utensils text-orange-500';
+        else if(t.category === 'Transportasi') icon = 'fa-car text-sky-500';
+        else if(t.category === 'Tagihan') icon = 'fa-file-invoice text-purple-500';
+        else if(t.category === 'Pulsa') icon = 'fa-mobile-screen text-rose-500';
+        else if(t.category === 'Top Up Game') icon = 'fa-gamepad text-emerald-500';
+        else if(t.category === 'Belanja') icon = 'fa-bag-shopping text-pink-500';
+        else if(t.category === 'Tabungan') icon = 'fa-piggy-bank text-teal-500';
+        else if(t.category === 'Liburan') icon = 'fa-plane text-blue-500';
+        else if(t.category === 'Nonton') icon = 'fa-film text-red-500';
+        else if(t.category === 'Patungan') icon = 'fa-people-arrows text-teal-500';
+        else if(t.type === 'in') icon = 'fa-arrow-down text-emerald-500';
+        
+        return `<div class="bg-white p-4 rounded-xl border border-gray-100 flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0"><i class="fa-solid ${icon}"></i></div><div class="flex-1"><p class="text-sm font-bold text-gray-800">${t.name}</p><p class="text-[10px] text-gray-400 mt-0.5">${t.category} • ${t.date}</p></div><p class="text-sm font-bold text-${color}-500">${sign}Rp ${formatRupiah(t.amount)}</p></div>`;
+      }).join('');
+      
+      document.getElementById('exp-tx-list').innerHTML = listHtml || `<div class="text-center py-6 bg-gray-50 rounded-xl border border-gray-100 border-dashed"><p class="text-xs font-bold text-gray-400">Belum ada riwayat transaksi</p></div>`;
+      document.getElementById('exp-total-in').textContent = 'Rp ' + formatRupiah(totIn);
+      document.getElementById('exp-total-out').textContent = 'Rp ' + formatRupiah(totOut);
+      
+      const chartTotal = breakdown['Top-Up'] + breakdown['Transfer'] + breakdown['Split Bill'] + breakdown['Savings'];
+      const bgTailwind = ['bg-rose-500', 'bg-amber-500', 'bg-blue-500', 'bg-purple-500'];
+      const categories = ['Top-Up', 'Transfer', 'Split Bill', 'Savings'];
+
+      let legendaHtml = `<div class="grid grid-cols-2 gap-y-3 gap-x-4">`;
+      categories.forEach((cat, idx) => {
+         legendaHtml += `
+           <div class="flex items-center gap-2 text-xs font-semibold text-gray-700">
+             <span class="w-3 h-3 rounded-full ${bgTailwind[idx]} flex-shrink-0 block"></span>
+             <span>${cat}</span>
+           </div>`;
+      });
+      legendaHtml += `</div>`;
+      
+      const legContainer = document.getElementById('exp-legenda');
+      if(legContainer) legContainer.innerHTML = legendaHtml;
+
+      if (chartTotal > 0) {
+        let p1 = (breakdown['Top-Up'] / chartTotal) * 100;
+        let p2 = p1 + (breakdown['Transfer'] / chartTotal * 100);
+        let p3 = p2 + (breakdown['Split Bill'] / chartTotal * 100);
+        
+        const chart = document.getElementById('exp-chart');
+        chart.style.setProperty('--p1-end', `${p1}%`); 
+        chart.style.setProperty('--p2-end', `${p2}%`); 
+        chart.style.setProperty('--p3-end', `${p3}%`);
+      } else {
+        const chart = document.getElementById('exp-chart');
+        chart.style.setProperty('--p1-end', `0%`); 
+        chart.style.setProperty('--p2-end', `0%`); 
+        chart.style.setProperty('--p3-end', `0%`);
+      }
+    }
+
+    // ── FEATURE 2: SAVINGS GOALS LOGIC ──
+    let selectedGoalIcon = '✈️';
+    function selectGoalIcon(btn, icon) {
+      selectedGoalIcon = icon;
+      document.querySelectorAll('.icon-btn').forEach(b => { b.classList.remove('bg-brand-50', 'border-brand-500'); b.classList.add('bg-gray-50', 'border-transparent'); });
+      btn.classList.remove('bg-gray-50', 'border-transparent'); btn.classList.add('bg-brand-50', 'border-brand-500');
+    }
+
+    function renderSavings() {
+      const goals = JSON.parse(localStorage.getItem('sw_goals')) || [];
+      let tot = 0;
+
+      if (goals.length === 0) {
+        document.getElementById('sav-goals-list').innerHTML = `<div class="flex flex-col items-center justify-center py-10 text-center px-4 bg-white rounded-2xl border border-gray-100 border-dashed"><div class="w-14 h-14 rounded-full bg-brand-50 flex items-center justify-center mb-3 text-brand-500 text-2xl"><i class="fa-solid fa-bullseye"></i></div><p class="text-sm font-bold text-gray-700">Belum Ada Target</p><p class="text-xs text-gray-400 mt-1 mb-4 max-w-[200px]">Mulai rencanakan masa depanmu dengan membuat target tabungan baru.</p><button onclick="openModal('modal-add-goal')" class="px-5 py-2.5 bg-brand-600 text-white text-xs font-bold rounded-xl shadow-sm hover:bg-brand-700 active:scale-95 transition-all">Buat Target</button></div>`;
+        document.getElementById('sav-total-saved').textContent = 'Rp 0'; return;
+      }
+
+      const listHtml = goals.map(g => {
+        const currentAmt = parseInt(g.current) || 0;
+        const targetAmt = parseInt(g.target) || 1; 
+        tot += currentAmt;
+        let pct = Math.floor((currentAmt / targetAmt) * 100);
+        if (pct > 100) pct = 100; if (pct < 0) pct = 0;
+        const isDone = currentAmt >= targetAmt;
+
+        return `<div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"><div class="flex justify-between items-start mb-3"><div class="flex gap-3 items-center"><div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-2xl">${g.icon}</div><div><p class="font-bold text-gray-800">${g.name}</p><p class="text-xs text-gray-400 mt-0.5">Rp ${formatRupiah(currentAmt)} / Rp ${formatRupiah(targetAmt)}</p></div></div><button onclick="deleteGoal(${g.id})" class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-100 transition"><i class="fa-solid fa-trash text-xs"></i></button></div><div class="h-2.5 bg-gray-100 rounded-full overflow-hidden mb-3"><div class="h-full bg-brand-500 rounded-full" style="width: ${pct}%;"></div></div><div class="flex justify-between items-center"><span class="text-xs font-bold ${isDone ? 'text-brand-600' : 'text-gray-500'}">${pct}% Terkumpul ${isDone ? '🎉' : ''}</span>${!isDone ? `<button onclick="prepareDeposit(${g.id})" class="px-4 py-1.5 bg-brand-50 text-brand-600 text-xs font-bold rounded-lg hover:bg-brand-100">Setor</button>` : `<span class="px-3 py-1 bg-brand-100 text-brand-700 text-[10px] font-bold rounded">Selesai</span>`}</div></div>`;
+      }).join('');
+      
+      document.getElementById('sav-goals-list').innerHTML = listHtml;
+      document.getElementById('sav-total-saved').textContent = 'Rp ' + formatRupiah(tot);
+    }
+
+    function saveGoal() {
+      const name = document.getElementById('goal-name').value;
+      const target = unformatRupiah(document.getElementById('goal-amount').value);
+      if(!name || target <= 0) return showToast('error', 'Gagal', 'Nama dan nominal wajib diisi.');
+      
+      const goals = JSON.parse(localStorage.getItem('sw_goals')) || [];
+      goals.unshift({ id: Date.now(), name, target, current: 0, icon: selectedGoalIcon });
+      localStorage.setItem('sw_goals', JSON.stringify(goals));
+      
+      closeModal('modal-add-goal'); renderSavings(); showToast('success', 'Target Dibuat', 'Mulai menabung sekarang!');
+      document.getElementById('goal-name').value = ''; document.getElementById('goal-amount').value = '';
+    }
+
+    let activeDepositGoalId = null;
+    function prepareDeposit(id) { 
+      activeDepositGoalId = id; 
+      document.getElementById('deposit-amount').value = ''; 
+      openModal('modal-deposit-goal'); 
+    }
+    
+    function executeDeposit() {
+      const amt = unformatRupiah(document.getElementById('deposit-amount').value);
+      if(amt <= 0) return showToast('error', 'Gagal', 'Nominal tidak valid.');
+      if(amt > currentBalance) return showToast('error', 'Gagal', 'Saldo utama tidak mencukupi.');
+      
+      const goals = JSON.parse(localStorage.getItem('sw_goals'));
+      const g = goals.find(x => x.id === activeDepositGoalId);
+      const currentAmt = parseInt(g.current) || 0;
+      const targetAmt = parseInt(g.target) || 1;
+
+      if(currentAmt + amt > targetAmt) return showToast('warning', 'Gagal', `Setoran melebihi sisa target (Sisa: Rp ${formatRupiah(targetAmt - currentAmt)}).`);
+      
+      g.current = currentAmt + amt; currentBalance -= amt;
+      localStorage.setItem('sw_goals', JSON.stringify(goals)); 
+      
+      // PERBAIKAN: Mengubah awalan name menjadi 'Savings:' agar klop dengan filter chart
+      let txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
+      txs.unshift({ 
+        id: Date.now(), 
+        name: `Savings: ${g.name}`, 
+        amount: amt, 
+        type: 'out', 
+        category: 'Tabungan', 
+        date: 'Hari ini',
+        goalRefId: g.id 
+      });
+      localStorage.setItem('sw_transactions', JSON.stringify(txs));
+
+      updateBalanceUI();
+      closeModal('modal-deposit-goal'); 
+      renderSavings(); 
+      renderExpense(); 
+      
+      insertNewNotification('success', 'Setoran Tabungan', `Berhasil setor Rp ${formatRupiah(amt)} ke target "${g.name}".`);
+    }
+
+    let goalIdToDelete = null;
+
+    function deleteGoal(id) {
+      goalIdToDelete = id;
+      openModal('modal-confirm-delete');
+    }
+
+    document.getElementById('btn-execute-delete').addEventListener('click', () => {
+      if (goalIdToDelete !== null) {
+        let goals = JSON.parse(localStorage.getItem('sw_goals')) || [];
+        const targetGoal = goals.find(x => x.id === goalIdToDelete);
+        
+        if (targetGoal) {
+          const refundAmount = parseInt(targetGoal.current) || 0;
+          currentBalance += refundAmount; 
+          updateBalanceUI(); 
+          
+          // HAPUS RIWAYAT DARI EXPENSE
+          let txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
+          txs = txs.filter(t => t.goalRefId !== goalIdToDelete);
+          localStorage.setItem('sw_transactions', JSON.stringify(txs));
+
+          goals = goals.filter(x => x.id !== goalIdToDelete);
+          localStorage.setItem('sw_goals', JSON.stringify(goals));
+          
+          closeModal('modal-confirm-delete');
+          renderSavings();
+          renderExpense(); 
+          
+          if (refundAmount > 0) {
+            showToast('success', 'Target Dihapus', `Dana Rp ${formatRupiah(refundAmount)} dikembalikan.`);
+          } else {
+            showToast('info', 'Target Dihapus', 'Target tabungan berhasil dihapus secara permanen.');
+          }
+        }
+        
+        goalIdToDelete = null;
       }
     });
 
-    // ── SIMULATOR EVENT EKSTERNAL (UNTUK DEMO KELAS) ──
-    // Fungsi ini dipicu saat menekan tombol "Simulasi Bill" di menu utama
-    function triggerSplitBillReminder() {
-      insertNewNotification('info', 'Reminder Hutang: Split Bill', 'Tagihan Makan Siang Bersama sebesar Rp 45.000 belum diselesaikan.');
+    // ── FEATURE 3: SPLIT BILL LOGIC ──
+    let contactIdToDelete = null;
+
+    function renderContacts() {
+      const contacts = JSON.parse(localStorage.getItem('sw_contacts')) || [];
+      if (contacts.length === 0) {
+        document.getElementById('contacts-list-container').innerHTML = `<div class="text-center py-6 bg-gray-50 rounded-xl border border-gray-100 border-dashed"><p class="text-xs font-bold text-gray-400">Belum ada kontak</p></div>`; return;
+      }
+      const html = contacts.map(c => `<div class="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-xs"><i class="fa-regular fa-user"></i></div><div><p class="text-sm font-bold text-gray-800">${c.name}</p><p class="text-[10px] text-gray-400">Rek: ${c.rek}</p></div></div><button onclick="deleteContact(${c.id})" class="text-rose-400 hover:text-rose-600 p-2"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`).join('');
+      document.getElementById('contacts-list-container').innerHTML = html;
     }
+
+    function saveContact() {
+      const rek = document.getElementById('contact-rekening').value;
+      if(!rek) return showToast('error', 'Gagal', 'Masukkan nomor rekening.');
+      let contacts = JSON.parse(localStorage.getItem('sw_contacts')) || [];
+      let usedNumbers = contacts.map(c => { let match = c.name.match(/Contact (\d+)/); return match ? parseInt(match[1]) : 0; }).filter(n => n > 0);
+      let newNumber = 1;
+      while(usedNumbers.includes(newNumber)) { newNumber++; }
+      
+      contacts.push({ id: Date.now(), name: `Contact ${newNumber}`, rek: rek });
+      localStorage.setItem('sw_contacts', JSON.stringify(contacts));
+      closeModal('modal-add-contact'); document.getElementById('contact-rekening').value = '';
+      showToast('success', 'Kontak Tersimpan', 'Kontak berhasil ditambahkan.'); renderContacts();
+    }
+
+    function deleteContact(id) { contactIdToDelete = id; openModal('modal-confirm-delete-contact'); }
+    document.getElementById('btn-execute-delete-contact').addEventListener('click', () => {
+      if(contactIdToDelete !== null) {
+        let contacts = JSON.parse(localStorage.getItem('sw_contacts')) || [];
+        contacts = contacts.filter(c => c.id !== contactIdToDelete);
+        localStorage.setItem('sw_contacts', JSON.stringify(contacts));
+        closeModal('modal-confirm-delete-contact'); renderContacts();
+        showToast('info', 'Kontak Dihapus', 'Kontak dicoret dari daftar.'); contactIdToDelete = null;
+      }
+    });
+
+    let sbTab = 'active';
+    function toggleSbTab(tab) {
+      sbTab = tab;
+      if(tab === 'active') { document.getElementById('tab-sb-active').className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow-sm text-brand-600 transition-all"; document.getElementById('tab-sb-settled').className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 transition-all"; }
+      else { document.getElementById('tab-sb-settled').className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-white shadow-sm text-brand-600 transition-all"; document.getElementById('tab-sb-active').className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 transition-all"; }
+      renderSplitBill();
+    }
+
+    function renderSplitBill() {
+      renderContacts();
+      const bills = JSON.parse(localStorage.getItem('sw_split_bills')) || [];
+      const filtered = bills.filter(b => b.status === sbTab);
+      const listHtml = filtered.map(b => {
+        const paidCount = b.members.filter(m => m.isPaid).length;
+        return `<div onclick="openBillDetail(${b.id})" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:bg-gray-50 transition"><div class="flex justify-between items-start mb-2"><h3 class="font-bold text-gray-800 text-base">${b.name}</h3><span class="px-2 py-1 rounded text-[10px] font-bold ${b.status==='settled'?'bg-emerald-100 text-emerald-700':(paidCount>0?'bg-amber-100 text-amber-700':'bg-rose-100 text-rose-700')}">${b.status==='settled'?'Lunas':(paidCount>0?'Sebagian':'Belum Lunas')}</span></div><p class="text-xl font-bold font-serif text-brand-600 mb-2">Rp ${formatRupiah(b.total)}</p><div class="flex justify-between items-center text-xs text-gray-500"><span><i class="fa-solid fa-users"></i> ${paidCount}/${b.members.length} Lunas</span><span>${b.date}</span></div></div>`;
+      }).join('');
+      document.getElementById('sb-list-container').innerHTML = listHtml || `<div class="text-center py-10"><i class="fa-solid fa-file-invoice-dollar text-4xl text-gray-200 mb-3"></i><p class="text-sm font-bold text-gray-400">Tidak ada tagihan ${sbTab === 'active'?'aktif':'selesai'}</p></div>`;
+    }
+
+    function openAddSplitBillModal() {
+      const contacts = JSON.parse(localStorage.getItem('sw_contacts')) || [];
+      if (contacts.length === 0) { openModal('modal-no-contact'); return; }
+      document.getElementById('sb-name').value = ''; document.getElementById('sb-total').value = '';
+      let html = `<label class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200 opacity-80 cursor-not-allowed"><input type="checkbox" checked disabled class="accent-brand-600 w-4 h-4"><span class="text-sm font-bold text-gray-800">Kamu (Me)</span></label>`;
+      contacts.forEach(c => { html += `<label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 cursor-pointer hover:bg-gray-50 transition"><input type="checkbox" id="check-${c.id}" class="accent-brand-600 w-4 h-4 sb-contact-check" value="${c.name}"><span class="text-sm font-semibold text-gray-700">${c.name}</span></label>`; });
+      document.getElementById('sb-member-selection').innerHTML = html; openModal('modal-add-splitbill');
+    }
+
+    function saveSplitBill() {
+      const name = document.getElementById('sb-name').value;
+      const total = parseInt(document.getElementById('sb-total').value);
+      const cat = document.getElementById('sb-category').value || 'Patungan';
+      if(!name || !total || total <= 0) return showToast('error', 'Gagal', 'Judul dan Nominal Tagihan wajib diisi.');
+
+      let membersToSave = [{ id: 'me', name: 'Kamu', isPaid: false, isMe: true }];
+      document.querySelectorAll('.sb-contact-check').forEach(chk => { if(chk.checked) { membersToSave.push({ id: chk.id.split('-')[1], name: chk.value, isPaid: false, isMe: false }); } });
+      if (membersToSave.length < 2) return showToast('warning', 'Gagal', 'Minimal centang 1 teman dari daftar kontak.');
+
+      const perPerson = Math.floor(total / membersToSave.length);
+      membersToSave.forEach(m => m.amount = perPerson);
+
+      let bills = JSON.parse(localStorage.getItem('sw_split_bills')) || [];
+      bills.unshift({ id: Date.now(), name, total, category: cat, date: 'Hari ini', status: 'active', members: membersToSave });
+      localStorage.setItem('sw_split_bills', JSON.stringify(bills));
+      
+      closeModal('modal-add-splitbill'); sbTab = 'active'; toggleSbTab('active');
+      insertNewNotification('success', 'Tagihan Terkirim', `${name} dibagi rata ke ${membersToSave.length} orang.`);
+    }
+
+    let activeBillId = null;
+    function openBillDetail(id) {
+      activeBillId = id;
+      const bills = JSON.parse(localStorage.getItem('sw_split_bills'));
+      const b = bills.find(x => x.id === id);
+      document.getElementById('det-sb-name').textContent = b.name;
+      document.getElementById('det-sb-total').textContent = 'Rp ' + formatRupiah(b.total);
+      document.getElementById('det-sb-status').textContent = b.status === 'settled' ? 'Selesai' : 'Aktif';
+      document.getElementById('det-sb-status').className = `inline-block mt-2 text-xs font-bold px-3 py-1 rounded-full ${b.status === 'settled' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-600'}`;
+
+      const memHtml = b.members.map(m => `
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+          <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full ${m.isMe ? 'bg-brand-100 text-brand-700' : 'bg-gray-200 text-gray-600'} flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user"></i></div><div><p class="text-sm font-bold text-gray-800">${m.name}</p><p class="text-xs font-semibold ${m.isPaid ? 'text-emerald-500' : 'text-rose-500'}">Rp ${formatRupiah(m.amount)}</p></div></div>
+          ${m.isPaid ? `<i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i>` : 
+            (m.isMe ? `<button onclick="payMyShare(${b.id})" class="px-3 py-1.5 bg-brand-600 text-white text-xs font-bold rounded-lg shadow-sm">Bayar</button>` : 
+            `<button id="btn-tagih-${m.id}" onclick="triggerAutoPay(${b.id}, '${m.id}', '${m.name}')" class="px-3 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs font-bold rounded-lg shadow-sm">Tagih</button>`)}
+        </div>`).join('');
+      document.getElementById('det-sb-members-list').innerHTML = memHtml;
+      openModal('modal-detail-splitbill');
+    }
+
+    function checkBillCompletion(billId) {
+      let bills = JSON.parse(localStorage.getItem('sw_split_bills'));
+      let b = bills.find(x => x.id === billId);
+      if(b.status !== 'settled' && b.members.every(m => m.isPaid)) {
+        b.status = 'settled'; localStorage.setItem('sw_split_bills', JSON.stringify(bills));
+        closeModal('modal-detail-splitbill'); toggleSbTab('settled');
+        setTimeout(() => { openModal('modal-sb-completed'); }, 400);
+      }
+    }
+
+    let activeBillIdToPay = null; 
+    function payMyShare(billId) { activeBillIdToPay = billId; openModal('modal-confirm-pay'); }
+    document.getElementById('btn-execute-pay').addEventListener('click', () => {
+      if (activeBillIdToPay !== null) {
+        let bills = JSON.parse(localStorage.getItem('sw_split_bills'));
+        let b = bills.find(x => x.id === activeBillIdToPay);
+        let me = b.members.find(x => x.isMe);
+        if(currentBalance < me.amount) { closeModal('modal-confirm-pay'); return showToast('error', 'Gagal', 'Saldo utama tidak mencukupi.'); }
+        
+        currentBalance -= me.amount; updateBalanceUI(); me.isPaid = true;
+        localStorage.setItem('sw_split_bills', JSON.stringify(bills));
+        
+        let txs = JSON.parse(localStorage.getItem('sw_transactions')) || [];
+        txs.unshift({ id: Date.now(), name: `Split Bill: ${b.name}`, amount: me.amount, type: 'out', category: b.category, date: 'Hari ini' });
+        localStorage.setItem('sw_transactions', JSON.stringify(txs));
+        
+        closeModal('modal-confirm-pay'); showToast('success', 'Berhasil', 'Pembayaran bagianmu sukses!');
+        if(activeBillId === activeBillIdToPay) openBillDetail(activeBillIdToPay); 
+        renderSplitBill(); checkBillCompletion(activeBillIdToPay); renderExpense(); renderSpeedDial();
+        activeBillIdToPay = null;
+      }
+    });
+
+    function triggerAutoPay(billId, memberId, memberName) {
+      const btn = document.getElementById(`btn-tagih-${memberId}`);
+      if(btn) { btn.textContent = 'Menunggu...'; btn.disabled = true; btn.classList.add('opacity-50'); }
+      showToast('info', 'Tagihan Terkirim', `Notifikasi tagihan telah dikirim ke ${memberName}.`);
+      
+      setTimeout(() => {
+        let bills = JSON.parse(localStorage.getItem('sw_split_bills'));
+        let b = bills.find(x => x.id === billId);
+        let m = b.members.find(x => x.id === memberId);
+        if(!m.isPaid) {
+          m.isPaid = true; localStorage.setItem('sw_split_bills', JSON.stringify(bills));
+          insertNewNotification('success', 'Pembayaran Diterima', `${memberName} melunasi tagihan Rp ${formatRupiah(m.amount)}.`);
+          if(activeBillId === billId) openBillDetail(billId);
+          renderSplitBill(); checkBillCompletion(billId);
+        }
+      }, 3500);
+    }
+
+    function logoutAction() { showToast('error', 'Keluar', 'Anda telah keluar dari akun.'); }
+    renderSpeedDial();
+
+    function saveProfileData() {
+      const newName = document.getElementById('edit-profile-name').value;
+      if(!newName.trim()) return showToast('error', 'Gagal', 'Nama tidak boleh kosong.');
+      
+      document.querySelectorAll('.font-bold').forEach(el => {
+        if(el.textContent === 'User') el.textContent = newName;
+      });
+      
+      closeModal('modal-edit-profile');
+      showToast('success', 'Berhasil', 'Perubahan profil berhasil disimpan.');
+    }
+
   </script>
 </body>
 </html>
