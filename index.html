@@ -782,6 +782,9 @@
         if (currentAction === 'topup') { 
           currentBalance += pendingTxAmount; 
           txs.unshift({ id: Date.now(), name: 'Top-Up Saldo', amount: pendingTxAmount, type: 'in', category: 'Pemasukan', date: 'Hari ini' });
+          
+          localStorage.setItem('sw_transactions', JSON.stringify(txs));
+          
           insertNewNotification('success', 'Top-Up Berhasil', `Ditambahkan Rp ${formatRupiah(pendingTxAmount)}`); 
           updateBalanceUI(); closeModal('modal-pin-verify'); pendingTxAmount = 0;
           renderSpeedDial(); renderExpense();
@@ -789,12 +792,14 @@
         } else if (currentAction === 'transfer') { 
           currentBalance -= pendingTxAmount; 
           txs.unshift({ id: Date.now(), name: `Transfer: ${pendingTxCategory}`, amount: pendingTxAmount, type: 'out', category: pendingTxCategory, date: 'Hari ini' });
+          
+          localStorage.setItem('sw_transactions', JSON.stringify(txs));
+          
           insertNewNotification('success', 'Transfer Berhasil', `Dikirim Rp ${formatRupiah(pendingTxAmount)}`); 
           updateBalanceUI(); closeModal('modal-pin-verify'); pendingTxAmount = 0;
           renderSpeedDial(); renderExpense();
           
         } else if (currentAction === 'pay-splitbill') {
-          // LOGIKA UTK EKSEKUSI PEMBAYARAN SPLIT BILL SETELAH PIN BENAR
           let bills = JSON.parse(localStorage.getItem('sw_split_bills'));
           let b = bills.find(x => x.id === activeBillIdToPay);
           let me = b.members.find(x => x.isMe);
@@ -804,21 +809,18 @@
           me.isPaid = true;
           localStorage.setItem('sw_split_bills', JSON.stringify(bills));
           
-          // Catat otomatis ke pengeluaran
           txs.unshift({ id: Date.now(), name: `Split Bill: ${b.name}`, amount: me.amount, type: 'out', category: b.category, date: 'Hari ini' });
           localStorage.setItem('sw_transactions', JSON.stringify(txs));
           
           closeModal('modal-pin-verify'); 
           showToast('success', 'Berhasil', 'Pembayaran bagianmu sukses!');
           
-          // Refresh UI semua komponen terdampak
           if(activeBillId === activeBillIdToPay) openBillDetail(activeBillIdToPay); 
           renderSplitBill(); 
           checkBillCompletion(activeBillIdToPay); 
           renderExpense(); 
           renderSpeedDial();
           
-          // Reset status
           activeBillIdToPay = null;
           currentAction = '';
         }
