@@ -29,7 +29,7 @@
 
   <style>
     * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'DM Sans', sans-serif; background: #e5e7eb; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    body { font-family: 'DM Sans', sans-serif; background: #e5e7eb; }
     .scroll-hidden::-webkit-scrollbar { display: none; }
     .scroll-hidden { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -73,9 +73,9 @@
   </style>
 </head>
 
-<body class="sm:py-4 m-0 overflow-hidden sm:overflow-auto">
+<body class="m-0 sm:py-4 overflow-hidden sm:overflow-auto min-h-screen flex justify-center items-start sm:items-center">
 
-  <div class="w-full bg-gray-50 sm:shadow-2xl relative overflow-hidden flex flex-col h-[100dvh] sm:h-[844px] sm:rounded-[40px]" id="app-frame" style="max-width: 390px;">
+  <div id="app-frame" class="w-full sm:max-w-[390px] bg-gray-50 sm:shadow-2xl relative overflow-hidden flex flex-col h-[100dvh] sm:h-[844px] sm:rounded-[40px]">
     
     <div id="toast-container"></div>
 
